@@ -24,10 +24,14 @@ public class Sala {
 
 	public Entrada cambiarTipoDeEntrada(int fila, int butaca, int tipo){
 		sala[butaca][fila] = tipo;
-		if(tipo != 0)
+		if(sala[butaca][fila] == 0 && tipo != 0){
+			entradasVendidas++;
 			return new Entrada(getCodigo(), getTituloPelicula(), getFecha(), getHora(), fila, butaca, tipo);
-		else
+		}
+		else{
+			entradasVendidas--;
 			return null;
+		}
 	}
 	
 	public boolean isSalaLlena(){

@@ -32,6 +32,15 @@ public class GestorDePedidos {
 	public Sala getSalaActual() {
 		return salaActual;
 	}
+	
+	public Pelicula cambiarFormato(boolean is3D){
+		if(is3D){
+			return cine.getCartelera().hayEn2D(getPeliculaActual());
+		}
+		else{
+			return cine.getCartelera().hayEn3D(getPeliculaActual());
+		}
+	}
 
 	public void setSalaActual(Sala salaActual) {
 		this.salaActual = salaActual;
@@ -39,7 +48,11 @@ public class GestorDePedidos {
 
 	public void comprarEntrada(int fila, int butaca, int tipo){
 		Sala sala = peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
-		pedido.add(sala.cambiarTipoDeEntrada(fila, butaca, tipo));
+		Entrada entrada = sala.cambiarTipoDeEntrada(fila, butaca, tipo);
+		if(entrada != null){
+			System.out.println("Entrada comprada :)");
+			pedido.add(entrada);
+		}
 	}
 	
 	public void quitarEntrada(int fila, int butaca){
@@ -50,6 +63,12 @@ public class GestorDePedidos {
 				pedido.remove(i);
 				sala.cambiarTipoDeEntrada(fila, butaca, 0);
 			}
+		}
+	}
+
+	public void guardarSalas() {
+		for(int i = 0; i < getCartelera().size(); i++){
+			getCartelera().get(i).guardarSalas();
 		}
 	}
 }

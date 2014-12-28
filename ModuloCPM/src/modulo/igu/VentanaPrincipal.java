@@ -2,23 +2,18 @@ package modulo.igu;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.Window;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-
 import modulo.logica.*;
 
 public class VentanaPrincipal extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private GestorDePedidos gestor;
 
 	/**
 	 * Launch the application.
@@ -40,8 +35,12 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal() {
-		Cine cine = new Cine();
+		gestor = new GestorDePedidos();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gestor.setPeliculaActual(gestor.getCartelera().get(0));
+		gestor.setSalaActual(gestor.getPeliculaActual().getSala("29/11/2014", "22:00"));
+		gestor.comprarEntrada(1, 1, Entrada.PACK_CUMPLE);
+		gestor.guardarSalas();
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
