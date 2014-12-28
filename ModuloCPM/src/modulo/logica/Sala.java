@@ -2,19 +2,28 @@ package modulo.logica;
 
 public class Sala {
 	private String nombreSala;
+	private String tituloPelicula;
 	private String codigo;
 	private String fecha;
 	private String hora;
 	private int[][] sala;
 	
-	public Sala(String nombreSala, String codigo, String fecha, String hora){
+	public Sala(String nombreSala, String titulo, String codigo, String fecha, String hora){
 		setNombreSala(nombreSala);
+		setTituloPelicula(titulo);
 		setCodigo(codigo);
 		setFecha(fecha);
 		setHora(hora);
 		sala = new int[10][4];
 	}
 
+	public String getTituloPelicula() {
+		return tituloPelicula;
+	}
+
+	public void setTituloPelicula(String tituloPelicula) {
+		this.tituloPelicula = tituloPelicula;
+	}
 	public String getNombreSala() {
 		return nombreSala;
 	}

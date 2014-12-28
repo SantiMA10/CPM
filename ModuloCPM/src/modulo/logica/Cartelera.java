@@ -11,13 +11,16 @@ public class Cartelera {
 		peliculas = new ArrayList<Pelicula>();
 		loadCartelera();
 	}
+	public ArrayList<Pelicula> getCartelera(){
+		return peliculas;
+	}
 	public void loadCartelera(){
 		String linea = "";
 	    try {
 	    	BufferedReader fichero = new BufferedReader(new FileReader("data/cartelera.dat"));
 	    	while (fichero.ready()) {
+	    		linea = fichero.readLine();
 	    		if(!linea.isEmpty()){
-	    			linea = fichero.readLine();
 		    		String[] pelicula = linea.split(";");
 		    		peliculas.add(new Pelicula(pelicula[0], pelicula[1], pelicula[2], pelicula[3], Integer.parseInt(pelicula[4]), 
 		    				pelicula[5], pelicula[6], pelicula[7], pelicula[8], pelicula[9]));

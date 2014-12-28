@@ -1,9 +1,15 @@
 package modulo.logica;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 
 public class Pelicula {
@@ -31,25 +37,64 @@ public class Pelicula {
 		procesarHoras(horas);
 		setNombreSala(nombreSala);
 		procesarFormato(is3D);
+		if(!loadSalas()){
+			createSalas();
+		}
+		//guardarSalas();
 		
 	}
 	
-	public Sala getSala(String fecha, String hora){
-		Sala salaPedida = null;
+	private void guardarSalas() {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try{
-			BufferedReader fichero = new BufferedReader(new FileReader("files/cartelera/"+getCodigo()+".json"));
-			for(int i = 0; i < salas.size(); i++){
-				if(salas.get(i).getFecha().equals(fecha) && salas.get(i).getHora().equals(hora)){
-					salaPedida = salas.get(i);
-				}
-			}
-		}catch(FileNotFoundException e){
-			salaPedida = new Sala(getNombreSala(), getCodigo(), fecha, hora);
-			salas.add(salaPedida);
+			System.out.println("Guardando salas: "+getTitulo());
+			BufferedWriter fichero = new BufferedWriter(new FileWriter("data/salas/"+getCodigo()+".json"));
+			gson.toJson(salas, fichero);
+	    	fichero.close();
+	    	System.out.println("Salas de "+getTitulo()+" guardadas");
 		}catch(Exception e){
-			e.printStackTrace();
+			
 		}
-		return salaPedida;
+		
+	}
+
+	private void createSalas() {
+		salas = new ArrayList<Sala>();
+		for(int i = 0; i < fechas.length; i++){
+			for(int j = 0; j < horas.length; j++){
+				salas.add(new Sala(getNombreSala(), getTitulo(),getCodigo(), fechas[i], horas[j]));
+			}
+		}
+		
+	}
+
+	public Sala getSala(String fecha, String hora){
+		for(int i = 0; i < salas.size(); i++){
+			if(salas.get(i).getFecha().equals(fecha) && salas.get(i).getHora().equals(hora)){
+				return salas.get(i);
+			}
+		}
+		return null;
+	}
+	
+	private boolean loadSalas(){
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		try{
+			BufferedReader fichero = new BufferedReader(new FileReader("data/salas/"+getCodigo()+".json"));
+			System.out.println("Cargando salas de "+getTitulo());
+			java.lang.reflect.Type tipoPeliculas = new TypeToken<ArrayList<Integer>>(){}.getType();
+			salas = gson.fromJson(fichero, tipoPeliculas);
+	    	fichero.close();
+	    	if(!salas.get(0).getTituloPelicula().equals(getTitulo())){
+	    		return false;
+	    	}
+	    	System.out.println("Salas de "+ getTitulo() + " cargadas");
+		}catch(FileNotFoundException fn){
+			return false;
+		}catch(Exception e){
+			return false;
+		}
+		return true;
 	}
 	
 	private void procesarHoras(String horas) {

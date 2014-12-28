@@ -20,8 +20,8 @@ public class Cine {
 	    try {
 	    	BufferedReader fichero = new BufferedReader(new FileReader("data/precios.dat"));
 	    	while (fichero.ready()) {
-	    		if(!linea.isEmpty()){
 	    			linea = fichero.readLine();
+		    	if(!linea.isEmpty()){
 		    		String[] datos = linea.split(";");
 		    		setNombre(datos[0]);
 		    		setPrecioEntrada(Double.parseDouble(datos[1]));
@@ -33,7 +33,7 @@ public class Cine {
 	    	fichero.close();
 	    	}catch (Exception e) {
 	    		e.printStackTrace();
-	    	}
+	    }
 	}
 	public Cartelera getCartelera() {
 		return cartelera;
