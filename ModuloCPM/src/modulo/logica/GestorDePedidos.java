@@ -66,6 +66,10 @@ public class GestorDePedidos {
 		}
 	}
 
+	public String getNombreCine(){
+		return cine.getNombre();
+	}
+	
 	public void guardarSalas() {
 		for(int i = 0; i < getCartelera().size(); i++){
 			getCartelera().get(i).guardarSalas();
