@@ -1,12 +1,16 @@
 package modulo.logica;
 
 public class Sala {
+	private static int NUMERO_FILAS = 4;
+	private static int NUMERO_BUTACAS = 10;
+	
 	private String nombreSala;
 	private String tituloPelicula;
 	private String codigo;
 	private String fecha;
 	private String hora;
 	private int[][] sala;
+	private int entradasVendidas;
 	
 	public Sala(String nombreSala, String titulo, String codigo, String fecha, String hora){
 		setNombreSala(nombreSala);
@@ -14,9 +18,22 @@ public class Sala {
 		setCodigo(codigo);
 		setFecha(fecha);
 		setHora(hora);
-		sala = new int[10][4];
+		sala = new int[NUMERO_BUTACAS][NUMERO_FILAS];
+		entradasVendidas = 0;
 	}
 
+	public Entrada cambiarTipoDeEntrada(int fila, int butaca, int tipo){
+		sala[butaca][fila] = tipo;
+		if(tipo != 0)
+			return new Entrada(getCodigo(), getTituloPelicula(), getFecha(), getHora(), fila, butaca, tipo);
+		else
+			return null;
+	}
+	
+	public boolean isSalaLlena(){
+		return entradasVendidas == 30;
+	}
+	
 	public String getTituloPelicula() {
 		return tituloPelicula;
 	}

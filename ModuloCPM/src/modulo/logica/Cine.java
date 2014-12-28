@@ -12,10 +12,10 @@ public class Cine {
 	private double incremento3D;
 	
 	public Cine(){
-		loadCine();
+		cargarCine();
 		setCartelera(new Cartelera());
 	}
-	public void loadCine(){
+	public void cargarCine(){
 		String linea = "";
 	    try {
 	    	BufferedReader fichero = new BufferedReader(new FileReader("data/precios.dat"));

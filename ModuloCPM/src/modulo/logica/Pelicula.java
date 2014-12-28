@@ -37,14 +37,12 @@ public class Pelicula {
 		procesarHoras(horas);
 		setNombreSala(nombreSala);
 		procesarFormato(is3D);
-		if(!loadSalas()){
-			createSalas();
-		}
-		//guardarSalas();
-		
+		if(!cargarSalas()){
+			crearSalas();
+		}		
 	}
 	
-	private void guardarSalas() {
+	public void guardarSalas() {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try{
 			System.out.println("Guardando salas: "+getTitulo());
@@ -58,7 +56,7 @@ public class Pelicula {
 		
 	}
 
-	private void createSalas() {
+	private void crearSalas() {
 		salas = new ArrayList<Sala>();
 		for(int i = 0; i < fechas.length; i++){
 			for(int j = 0; j < horas.length; j++){
@@ -77,7 +75,7 @@ public class Pelicula {
 		return null;
 	}
 	
-	private boolean loadSalas(){
+	private boolean cargarSalas(){
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try{
 			BufferedReader fichero = new BufferedReader(new FileReader("data/salas/"+getCodigo()+".json"));

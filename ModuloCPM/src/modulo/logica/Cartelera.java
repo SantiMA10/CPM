@@ -9,12 +9,12 @@ public class Cartelera {
 	
 	public Cartelera(){
 		peliculas = new ArrayList<Pelicula>();
-		loadCartelera();
+		cargarCartelera();
 	}
 	public ArrayList<Pelicula> getCartelera(){
 		return peliculas;
 	}
-	public void loadCartelera(){
+	public void cargarCartelera(){
 		String linea = "";
 	    try {
 	    	BufferedReader fichero = new BufferedReader(new FileReader("data/cartelera.dat"));
@@ -30,5 +30,22 @@ public class Cartelera {
 	    	}catch (Exception e) {
 	    		e.printStackTrace();
 	    	}
+	}
+	public Pelicula hayEn3D(Pelicula pelicula){
+		for(int i = 0; i < peliculas.size(); i++){
+			if(peliculas.get(i).getTitulo().equals(pelicula.getTitulo()) && peliculas.get(i).isIs3D()){
+				return peliculas.get(i);
+			}
+		}
+		return null;
+	}
+	
+	public Pelicula hayEn2D(Pelicula pelicula){
+		for(int i = 0; i < peliculas.size(); i++){
+			if(peliculas.get(i).getTitulo().equals(pelicula.getTitulo()) && !peliculas.get(i).isIs3D()){
+				return peliculas.get(i);
+			}
+		}
+		return null;
 	}
 }
