@@ -21,7 +21,7 @@ public class Cartelera {
 		recomendadas[0] = peliculas.get((int) (Math.random()*peliculas.size()));
 		do{
 			recomendadas[1] = peliculas.get((int) (Math.random()*peliculas.size()));
-		}while(!recomendadas[1].getCodigo().equals(recomendadas[0].getCodigo()));
+		}while(recomendadas[1].getCodigo().equals(recomendadas[0].getCodigo()));
 	}
 	
 	public ArrayList<Pelicula> getCartelera(){

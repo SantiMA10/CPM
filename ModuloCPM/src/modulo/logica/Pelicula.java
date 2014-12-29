@@ -176,6 +176,11 @@ public class Pelicula {
 		return is3D;
 	}
 
-
+	public String toString(){
+		if(isIs3D()){
+			return getTitulo() + "3D";
+		}
+		return getTitulo();
+	}
 	
 }

@@ -3,6 +3,7 @@ package modulo.igu;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,8 +43,14 @@ import javax.swing.JTable;
 
 import java.awt.GridLayout;
 
-import javax.swing.border.TitledBorder;
 import javax.swing.ListSelectionModel;
+import javax.swing.JList;
+import javax.swing.JTextArea;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.SwingConstants;
+
 
 public class VentanaPrincipal extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -78,6 +85,13 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panelCarteleraPedido;
 	private JLabel lblCarteleraRecomendada1;
 	private JLabel lblCarteleraRecomendada2;
+	private JScrollPane scrollPanePrecios;
+	private JScrollPane scrollPanePedido;
+	private JList<Pelicula> listaPedido;
+	private DefaultListModel<Pelicula> modeloListaPedido;
+	private JPanel panelCarteleraPedidoSur;
+	private JButton btnCarteleraIrPedido;
+	private JTextArea txtrCarteleraPrecios;
 
 	/**
 	 * Launch the application.
@@ -128,7 +142,10 @@ public class VentanaPrincipal extends JFrame {
 		panelCarteleraRecomendadas.setBorder(ComponentsUtil.getBorder(traduccion.getString("recomendadas")));
 		panelCarteleraPrecios.setBorder(ComponentsUtil.getBorder(traduccion.getString("precios")));
 		panelCarteleraPedido.setBorder(ComponentsUtil.getBorder(traduccion.getString("pedido")));
-		
+		btnCarteleraIrPedido.setText(traduccion.getString("btnIrPedido"));
+		modeloCartelera.setColumnIdentifiers(new String[]{traduccion.getString("pelicula"),traduccion.getString("informacion"),"Oculto"});
+		ajustarTablaCartelera();
+		txtrCarteleraPrecios.setText(gestor.getListaPrecios(traduccion));
 	}
 
 	private JPanel getPanelInicial() {
@@ -234,6 +251,20 @@ public class VentanaPrincipal extends JFrame {
 			String[] nombreColumnas = {"Pelicula","Informacion","Oculto"};
 			modeloCartelera = new MiModeloTabla(nombreColumnas, 0);
 			tablaCartelera = new JTable(modeloCartelera);
+			tablaCartelera.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int fila = tablaCartelera.getSelectedRow();
+					if(fila != -1){
+						if(e.getClickCount() == 1){
+							btnCarteleraSiguiente.setEnabled(true);
+						}
+						if(e.getClickCount() == 2){
+							gestor.setPeliculaActual((Pelicula) modeloCartelera.getValueAt(fila, 2));
+						}
+					}
+				}
+			});
 			tablaCartelera.getTableHeader().setReorderingAllowed(false);
 			tablaCartelera.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			prepararModeloCartelera();
@@ -250,11 +281,14 @@ public class VentanaPrincipal extends JFrame {
 			gestor.getCartelera().get(i).getNombreSala());
 			nuevaFila[2] = gestor.getCartelera().get(i);
 			modeloCartelera.addRow(nuevaFila);
+		}
+	}
+	private void ajustarTablaCartelera(){
+		for(int i = 0; i < tablaCartelera.getRowCount(); i++){
 			tablaCartelera.setRowHeight(i, 300);
 		}
 		tablaCartelera.getColumnModel().getColumn(0).setMaxWidth(208);
 		tablaCartelera.getColumnModel().getColumn(0).setMinWidth(208);
-
 		tablaCartelera.getColumnModel().removeColumn(tablaCartelera.getColumnModel().getColumn(2));
 	}
 	private JPanel getPanelCarteleraSur() {
@@ -301,6 +335,15 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnCarteleraSiguiente() {
 		if (btnCarteleraSiguiente == null) {
 			btnCarteleraSiguiente = new JButton("Cartelera Siguiente");
+			btnCarteleraSiguiente.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int fila = tablaCartelera.getSelectedRow();
+					if(fila != -1){
+						gestor.setPeliculaActual((Pelicula) modeloCartelera.getValueAt(fila, 2));
+					}
+				}
+			});
+			btnCarteleraSiguiente.setEnabled(false);
 			btnCarteleraSiguiente.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 		}
 		return btnCarteleraSiguiente;
@@ -339,19 +382,28 @@ public class VentanaPrincipal extends JFrame {
 		if (panelCarteleraPrecios == null) {
 			panelCarteleraPrecios = new JPanel();
 			panelCarteleraPrecios.setBackground(DEFAULT_COLOR);
+			panelCarteleraPrecios.setLayout(new BorderLayout(0, 0));
+			panelCarteleraPrecios.add(getScrollPanePrecios());
 		}
 		return panelCarteleraPrecios;
 	}
 	private JPanel getPanelCarteleraPedido() {
 		if (panelCarteleraPedido == null) {
 			panelCarteleraPedido = new JPanel();
+			if(gestor.isPedidoVacio()){
+				panelCarteleraPedido.setVisible(false);
+			}
 			panelCarteleraPedido.setBackground(DEFAULT_COLOR);
+			panelCarteleraPedido.setLayout(new BorderLayout(0, 0));
+			panelCarteleraPedido.add(getScrollPanePedido());
+			panelCarteleraPedido.add(getPanelCarteleraPedidoSur(), BorderLayout.SOUTH);
 		}
 		return panelCarteleraPedido;
 	}
 	private JLabel getLblCarteleraRecomendada1() {
 		if (lblCarteleraRecomendada1 == null) {
 			lblCarteleraRecomendada1 = new JLabel("");
+			lblCarteleraRecomendada1.setHorizontalAlignment(SwingConstants.CENTER);
 			lblCarteleraRecomendada1.addComponentListener(new ComponentAdapter() {
 				@Override
 				public void componentResized(ComponentEvent e) {
@@ -364,6 +416,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblCarteleraRecomendada2() {
 		if (lblCarteleraRecomendada2 == null) {
 			lblCarteleraRecomendada2 = new JLabel("");
+			lblCarteleraRecomendada2.setHorizontalAlignment(SwingConstants.CENTER);
 			lblCarteleraRecomendada2.addComponentListener(new ComponentAdapter() {
 				@Override
 				public void componentResized(ComponentEvent e) {
@@ -372,5 +425,50 @@ public class VentanaPrincipal extends JFrame {
 			});
 		}
 		return lblCarteleraRecomendada2;
+	}
+	private JScrollPane getScrollPanePrecios() {
+		if (scrollPanePrecios == null) {
+			scrollPanePrecios = new JScrollPane();
+			scrollPanePrecios.setBackground(DEFAULT_COLOR);
+			scrollPanePrecios.setViewportView(getTxtrCarteleraPrecios());
+		}
+		return scrollPanePrecios;
+	}
+	private JScrollPane getScrollPanePedido() {
+		if (scrollPanePedido == null) {
+			scrollPanePedido = new JScrollPane();
+			scrollPanePedido.setBackground(DEFAULT_COLOR);
+			scrollPanePedido.setViewportView(getListaPedido());
+		}
+		return scrollPanePedido;
+	}
+	private JList<Pelicula> getListaPedido() {
+		if (listaPedido == null) {
+			modeloListaPedido = new DefaultListModel<Pelicula>();
+			listaPedido = new JList<Pelicula>();
+		}
+		return listaPedido;
+	}
+	private JPanel getPanelCarteleraPedidoSur() {
+		if (panelCarteleraPedidoSur == null) {
+			panelCarteleraPedidoSur = new JPanel();
+			panelCarteleraPedidoSur.setBackground(DEFAULT_COLOR);
+			panelCarteleraPedidoSur.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+			panelCarteleraPedidoSur.add(getBtnCarteleraIrPedido());
+		}
+		return panelCarteleraPedidoSur;
+	}
+	private JButton getBtnCarteleraIrPedido() {
+		if (btnCarteleraIrPedido == null) {
+			btnCarteleraIrPedido = new JButton("Cartelera Ir Pedido");
+		}
+		return btnCarteleraIrPedido;
+	}
+	private JTextArea getTxtrCarteleraPrecios() {
+		if (txtrCarteleraPrecios == null) {
+			txtrCarteleraPrecios = new JTextArea();
+			txtrCarteleraPrecios.setText("Cartelera Precios");
+		}
+		return txtrCarteleraPrecios;
 	}
 }

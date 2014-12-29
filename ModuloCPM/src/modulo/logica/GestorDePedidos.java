@@ -1,6 +1,8 @@
 package modulo.logica;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class GestorDePedidos {
 	private Cine cine;
@@ -64,6 +66,27 @@ public class GestorDePedidos {
 				sala.cambiarTipoDeEntrada(fila, butaca, 0);
 			}
 		}
+	}
+	
+	public String getListaPrecios(ResourceBundle traduccion){
+		DecimalFormat formato = new DecimalFormat("###.##");
+		StringBuilder sb = new StringBuilder(traduccion.getString("entradaNormal") + ": "
+					+ formato.format(cine.getPrecioEntrada())+"€\n");
+		sb.append(traduccion.getString("entradaNormal3D") + ": "
+					+ formato.format(cine.getPrecioEntrada()+cine.getIncremento3D())+"€\n");
+		sb.append(traduccion.getString("entradaJubilado") + ": "
+					+ formato.format(cine.getPrecioEntrada()+cine.getDescuentoJubilado())+"€\n");
+		sb.append(traduccion.getString("entradaJubilado3D") + ": " 
+					+ formato.format(cine.getPrecioEntrada()+cine.getDescuentoJubilado()+cine.getIncremento3D())+"€\n");
+		sb.append(traduccion.getString("entradaCumple") + ": "
+					+ formato.format(cine.getPrecioEntrada()+cine.getIncrementoCumple())+"€\n");
+		sb.append(traduccion.getString("entradaCumple3D") + ": "
+				+ formato.format(cine.getPrecioEntrada()+cine.getIncrementoCumple()+cine.getIncremento3D())+"€\n");
+		sb.append(traduccion.getString("entradaJubiCumple") + ": "
+				+ formato.format(cine.getPrecioEntrada()+cine.getIncrementoCumple()+cine.getDescuentoJubilado())+"€\n");
+	sb.append(traduccion.getString("entradaJubiCumple3D") + ": "
+			+ formato.format(cine.getPrecioEntrada()+cine.getIncrementoCumple()+cine.getIncremento3D()+cine.getDescuentoJubilado())+"€");
+		return sb.toString();
 	}
 	
 	public boolean isPedidoVacio(){
