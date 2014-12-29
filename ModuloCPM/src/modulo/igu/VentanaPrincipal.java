@@ -2,6 +2,7 @@ package modulo.igu;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.DefaultListModel;
@@ -10,12 +11,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import modulo.logica.*;
 import modulo.util.ComponentsUtil;
+import modulo.util.DateUtil;
 import modulo.util.ImageUtil;
 import modulo.util.MiCellRender;
 import modulo.util.MiModeloTabla;
@@ -36,11 +39,9 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.FlowLayout;
 import java.net.URI;
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.awt.event.ActionListener;
@@ -63,9 +64,11 @@ import java.beans.PropertyChangeListener;
 import javax.swing.SwingConstants;
 
 import com.toedter.calendar.JCalendar;
-import com.toedter.calendar.JDayChooser;
+
 import java.awt.Component;
+
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 
 
 public class VentanaPrincipal extends JFrame {
@@ -133,7 +136,6 @@ public class VentanaPrincipal extends JFrame {
 	private JCalendar calendar;
 	private JPanel panelHorarioCentro;
 	private JPanel panelHorarioHoras;
-	private JLabel lblHorarioFechaSeleccionada;
 	private JScrollPane scrollPaneHoras;
 	private JList<String> listaHoras;
 	private DefaultListModel<String> modeloListaHoras;
@@ -148,6 +150,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnHorarioSiguiente;
 	private JLabel lblHorarioImagen;
 	private Component horizontalGlue;
+	private JPanel panelHorarioJCalendar;
 
 
 	/**
@@ -211,6 +214,13 @@ public class VentanaPrincipal extends JFrame {
 		btnPeliculaVerTrailer.setText(traduccion.getString("btnVerTrailer"));
 		panelPeliculaSinopsis.setBorder(ComponentsUtil.getBorder(traduccion.getString("sinopsis")));
 		panelPeliculaInformacion.setBorder(ComponentsUtil.getBorder(traduccion.getString("informacion")));
+		//Horario
+		btnHorarioAtras.setText(traduccion.getString("btnAtras"));
+		btnHorarioVolverCartelera.setText(traduccion.getString("btnVolverACartelera"));
+		btnHorarioSiguiente.setText(traduccion.getString("btnSiguiente"));
+		lblHorarioTitulo.setText(traduccion.getString("horario"));
+		panelHorarioJCalendar.setBorder(ComponentsUtil.getBorder(traduccion.getString("calendario")));
+
 	}
 
 	private JPanel getPanelInicial() {
@@ -800,54 +810,47 @@ public class VentanaPrincipal extends JFrame {
 		return panelHorario;
 	}
 	private void prepararPanelHorario(){
-		try {
-			String fechaMinima = gestor.getPeliculaActual().getFechas()[0];
-			String fechaMaxima = gestor.getPeliculaActual().getFechas()[gestor.getPeliculaActual().getFechas().length-1];
-			ImageUtil.adaptarImagen(lblHorarioImagen, gestor.getPeliculaActual().getRutaImagen());
-			final SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/M/yyyy");
-			final DateFormat formatoFecha2 = DateFormat.getDateInstance(DateFormat.LONG, traduccion.getLocale());
-			calendar = new JCalendar(formatoFecha.parse(fechaMinima));
-			panelHorarioCentro.remove(getPanelHorarioHoras());
-			if(panelHorarioCentro.getComponentCount() == 1){
-				panelHorarioCentro.remove(0);
+		ImageUtil.adaptarImagen(lblHorarioImagen, gestor.getPeliculaActual().getRutaImagen());
+		iniciarJCalendar();
+		prepararModeloListaHoras();
+		calendar.addPropertyChangeListener("calendar", new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {  
+				calendar.getDayChooser().getDayPanel().getComponentAt(calendar.getDayChooser().getDayPanel().getLocation()).setForeground(DEFAULT_COLOR);
+				String fecha = calendar.getDayChooser().getDay()+"/"+calendar.getMonthChooser().getMonth()+"/"+calendar.getYearChooser().getYear();
+				panelHorarioHoras.setBorder(ComponentsUtil.getBorder(DateUtil.getFechaConFormato(fecha, traduccion.getLocale())));
+				prepararModeloListaHoras();
 			}
-			panelHorarioCentro.add(calendar);
-			panelHorarioCentro.add(getPanelHorarioHoras());
-			lblHorarioFechaSeleccionada.setText(formatoFecha2.format(formatoFecha.parse(fechaMinima)));
-			modeloListaHoras.clear();
-			for(int i = 0; i < gestor.getPeliculaActual().getHoras().length; i++){
-				modeloListaHoras.addElement(gestor.getPeliculaActual().getHoras()[i]);
-			}
-			calendar.setSelectableDateRange(formatoFecha.parse(fechaMinima), formatoFecha.parse(fechaMaxima));
-			calendar.addPropertyChangeListener("calendar", new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent e) {  
-					calendar.getDayChooser().getDayPanel().getComponentAt(calendar.getDayChooser().getDayPanel().getLocation()).setForeground(DEFAULT_COLOR);
-					String fecha = calendar.getDayChooser().getDay()+"/"+calendar.getMonthChooser().getMonth()+"/"+
-							calendar.getYearChooser().getYear();
-					try {
-						lblHorarioFechaSeleccionada.setText(formatoFecha2.format(formatoFecha.parse(fecha)));
-						modeloListaHoras.clear();
-						for(int i = 0; i < gestor.getPeliculaActual().getHoras().length; i++){
-							modeloListaHoras.addElement(gestor.getPeliculaActual().getHoras()[i]);
-						}
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-			});
-		} catch (Exception e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+		});
+	}
+	//
+	private void iniciarJCalendar(){
+		String fechaMinima = gestor.getPeliculaActual().getFechas()[0];
+		String fechaMaxima = gestor.getPeliculaActual().getFechas()[gestor.getPeliculaActual().getFechas().length-1];
+		calendar = new JCalendar(DateUtil.getFecha(fechaMinima));
+		calendar.setLocale(traduccion.getLocale());
+		if(panelHorarioJCalendar.getComponentCount() == 1){
+			panelHorarioJCalendar.remove(0);
+			panelHorarioJCalendar.add(calendar);
 		}
-		
+		else{
+			panelHorarioJCalendar.add(calendar);
+		}
+		panelHorarioHoras.setBorder(ComponentsUtil.getBorder(DateUtil.getFechaConFormato(fechaMinima, traduccion.getLocale())));
+		calendar.setSelectableDateRange(DateUtil.getFecha(fechaMinima), DateUtil.getFecha(fechaMaxima));
+	}
+	private void prepararModeloListaHoras(){
+		modeloListaHoras.clear();
+		for(int i = 0; i < gestor.getPeliculaActual().getHoras().length; i++){
+			modeloListaHoras.addElement(gestor.getPeliculaActual().getHoras()[i]);
+		}
 	}
 	private JPanel getPanelHorarioCentro() {
 		if (panelHorarioCentro == null) {
 			panelHorarioCentro = new JPanel();
 			panelHorarioCentro.setBackground(DEFAULT_COLOR);
-			panelHorarioCentro.setLayout(new GridLayout(0, 2, 0, 5));
+			panelHorarioCentro.setLayout(new GridLayout(2, 2, 2, 5));
+			panelHorarioCentro.add(getPanelHorarioJCalendar());
 			panelHorarioCentro.add(getPanelHorarioHoras());
 
 		}
@@ -858,16 +861,9 @@ public class VentanaPrincipal extends JFrame {
 			panelHorarioHoras = new JPanel();
 			panelHorarioHoras.setBackground(DEFAULT_COLOR);
 			panelHorarioHoras.setLayout(new BorderLayout(0, 0));
-			panelHorarioHoras.add(getLblHorarioFechaSeleccionada(), BorderLayout.NORTH);
 			panelHorarioHoras.add(getScrollPaneHoras(), BorderLayout.CENTER);
 		}
 		return panelHorarioHoras;
-	}
-	private JLabel getLblHorarioFechaSeleccionada() {
-		if (lblHorarioFechaSeleccionada == null) {
-			lblHorarioFechaSeleccionada = new JLabel();
-		}
-		return lblHorarioFechaSeleccionada;
 	}
 	private JScrollPane getScrollPaneHoras() {
 		if (scrollPaneHoras == null) {
@@ -880,6 +876,17 @@ public class VentanaPrincipal extends JFrame {
 		if (listaHoras == null) {
 			modeloListaHoras = new DefaultListModel<String>();
 			listaHoras = new JList<String>(modeloListaHoras);
+			listaHoras.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(e.getClickCount() == 1){
+						btnHorarioSiguiente.setEnabled(true);
+					}
+					else if(e.getClickCount() == 2){
+						gestor.setSalaActual(DateUtil.getFechaSinFormato(((TitledBorder)panelHorarioHoras.getBorder()).getTitle(), traduccion.getLocale()), listaHoras.getSelectedValue());
+					}
+				}
+			});
 			listaHoras.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 			listaHoras.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		}
@@ -958,6 +965,12 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnHorarioVolverCartelera() {
 		if (btnHorarioVolverCartelera == null) {
 			btnHorarioVolverCartelera = new JButton("Horario Volver Cartelera");
+			btnHorarioVolverCartelera.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					lblHorarioImagen.setIcon(null);
+					((CardLayout)contentPane.getLayout()).show(contentPane,"cartelera");
+				}
+			});
 			btnHorarioVolverCartelera.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 		}
 		return btnHorarioVolverCartelera;
@@ -965,6 +978,15 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnHorarioSiguiente() {
 		if (btnHorarioSiguiente == null) {
 			btnHorarioSiguiente = new JButton("Horario Siguiente");
+			btnHorarioSiguiente.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int indice = listaHoras.getSelectedIndex();
+					if(indice != -1){
+						gestor.setSalaActual(DateUtil.getFechaSinFormato(((TitledBorder)panelHorarioHoras.getBorder()).getTitle(), traduccion.getLocale()), listaHoras.getSelectedValue());
+					}
+				}
+			});
+			btnHorarioSiguiente.setEnabled(false);
 			btnHorarioSiguiente.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 		}
 		return btnHorarioSiguiente;
@@ -980,5 +1002,13 @@ public class VentanaPrincipal extends JFrame {
 			horizontalGlue = Box.createHorizontalGlue();
 		}
 		return horizontalGlue;
+	}
+	private JPanel getPanelHorarioJCalendar() {
+		if (panelHorarioJCalendar == null) {
+			panelHorarioJCalendar = new JPanel();
+			panelHorarioJCalendar.setBackground(DEFAULT_COLOR);
+			panelHorarioJCalendar.setLayout(new GridLayout(1, 1, 0, 0));
+		}
+		return panelHorarioJCalendar;
 	}
 }

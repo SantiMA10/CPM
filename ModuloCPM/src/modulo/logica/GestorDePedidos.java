@@ -1,5 +1,6 @@
 package modulo.logica;
 
+import java.awt.Component;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -105,5 +106,9 @@ public class GestorDePedidos {
 	
 	public Pelicula[] getRecomendadas(){
 		return cine.getCartelera().getRecomendadas();
+	}
+
+	public void setSalaActual(String fecha, String hora) {
+		salaActual = peliculaActual.getSala(fecha, hora);
 	}
 }
