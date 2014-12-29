@@ -2,7 +2,6 @@ package modulo.igu;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.DefaultListModel;
@@ -39,9 +38,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.FlowLayout;
 import java.net.URI;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.awt.event.ActionListener;
@@ -68,7 +64,6 @@ import com.toedter.calendar.JCalendar;
 import java.awt.Component;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 
 
 public class VentanaPrincipal extends JFrame {

@@ -1,6 +1,5 @@
 package modulo.logica;
 
-import java.awt.Component;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
