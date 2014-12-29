@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.EventQueue;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,10 +14,10 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import modulo.logica.*;
+import modulo.util.MiModeloTabla;
 
 import java.awt.CardLayout;
 
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 
 import java.awt.Font;
@@ -39,14 +38,21 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
 import java.awt.GridLayout;
 
-public class VentanaPrincipal extends JFrame {
-	private static Color DEFAULT_COLOR = new Color(32, 178, 170);
+import javax.swing.border.TitledBorder;
 
+public class VentanaPrincipal extends JFrame {
 	private static final long serialVersionUID = 1L;
+	private static Color DEFAULT_COLOR = new Color(32, 178, 170);
+	private static final int DEFAULT_BUTTON_SIZE = 18;
+	private static final int DEFAULT_TITTLE_SIZE = 40;
+	private static final int DEFAULT_BORDER_TITTLE_SIZE = 25;
+	
 	private JPanel contentPane;
 	private GestorDePedidos gestor;
 	private JPanel panelInicial;
@@ -56,15 +62,23 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnInicioIngls;
 	private ResourceBundle traduccion;
 	private JPanel panelCartelera;
-	private JLabel lblCarteleraTitutlo;
+	private JLabel lblCarteleraTitulo;
 	private JPanel panelCarteleraCentro;
 	private JScrollPane scrollPaneTablaCartelera;
 	private JTable tablaCartelera;
+	private MiModeloTabla modeloCartelera;
 	private JPanel panelCarteleraSur;
 	private JPanel panelCarteleraSurIzquierda;
 	private JPanel panelCarteleraSurDerecha;
 	private JButton btnCarteleraAtras;
 	private JButton btnCarteleraSiguiente;
+	private JPanel panelCarteleraEste;
+	private JPanel panelCarteleraRecomendadas;
+	private JPanel panelCarteleraDatos;
+	private JPanel panelCarteleraPrecios;
+	private JPanel panelCarteleraPedido;
+	private JLabel lblCarteleraRecomendada1;
+	private JLabel lblCarteleraRecomendada2;
 
 	/**
 	 * Launch the application.
@@ -95,8 +109,8 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));
-		contentPane.add(getPanelInicial(), "inicial");
-		contentPane.add(getPanelCartelera(), "name_1419811776191793000");
+		contentPane.add(getPanelInicial(), "inicio");
+		contentPane.add(getPanelCartelera(), "cartelera");
 	}
 	
 	private void localizar(Locale localizacion){
@@ -108,7 +122,21 @@ public class VentanaPrincipal extends JFrame {
 		txtpnBienvenidosA.setText(traduccion.getString("bienvenidos") + " " + gestor.getNombreCine());
 		btnInicioEspaol.setText(traduccion.getString("btnEs"));
 		btnInicioIngls.setText(traduccion.getString("btnEn"));
+		//Cartelera
+		lblCarteleraTitulo.setText(traduccion.getString("cartelera"));
+		btnCarteleraAtras.setText(traduccion.getString("btnAtras"));
+		btnCarteleraSiguiente.setText(traduccion.getString("btnSiguiente"));
+		panelCarteleraRecomendadas.setBorder(getBorder(traduccion.getString("recomendadas")));
+		panelCarteleraPrecios.setBorder(getBorder(traduccion.getString("precios")));
+		panelCarteleraPedido.setBorder(getBorder(traduccion.getString("pedido")));
+
 		
+	}
+	
+	private TitledBorder getBorder(String titulo){
+		TitledBorder borde = new TitledBorder(null, titulo, TitledBorder.LEADING, TitledBorder.TOP, null, null);
+		borde.setTitleFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BORDER_TITTLE_SIZE));
+		return borde;
 	}
 	
 	private void adaptarImagen(Component componente, String ruta){
@@ -117,7 +145,7 @@ public class VentanaPrincipal extends JFrame {
 				JButton boton = (JButton) componente;
 				BufferedImage icono = ImageIO.read(VentanaPrincipal.class.getResource(ruta));
 				boton.setIcon(new ImageIcon(Scalr.resize(icono, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC,
-			               boton.getWidth(),  boton.getHeight(), Scalr.OP_ANTIALIAS)));
+			               boton.getWidth(),  boton.getHeight())));
 			}catch(Exception e){
 				
 			}
@@ -127,7 +155,7 @@ public class VentanaPrincipal extends JFrame {
 				JLabel label = (JLabel) componente;
 				BufferedImage icono = ImageIO.read(VentanaPrincipal.class.getResource(ruta));
 				label.setIcon(new ImageIcon(Scalr.resize(icono, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, 
-						label.getWidth(),  label.getHeight(), Scalr.OP_ANTIALIAS)));
+						label.getWidth(),  label.getHeight())));
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -148,7 +176,7 @@ public class VentanaPrincipal extends JFrame {
 		if (txtpnBienvenidosA == null) {
 			txtpnBienvenidosA = new JTextPane();
 			txtpnBienvenidosA.setBackground(DEFAULT_COLOR);
-			txtpnBienvenidosA.setFont(new Font("Lucida Grande", Font.PLAIN, 40));
+			txtpnBienvenidosA.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_TITTLE_SIZE));
 			txtpnBienvenidosA.setEditable(false);
 			txtpnBienvenidosA.setText("Bienvenidos a "+gestor.getNombreCine());
 			StyledDocument doc = txtpnBienvenidosA.getStyledDocument();
@@ -173,10 +201,11 @@ public class VentanaPrincipal extends JFrame {
 			btnInicioEspaol.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					localizar(new Locale("es"));
+					((CardLayout)contentPane.getLayout()).show(contentPane,"cartelera");
 				}
 			});
 			btnInicioEspaol.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/modulo/img/banderaEs.jpg")));
-			btnInicioEspaol.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+			btnInicioEspaol.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 		}
 		return btnInicioEspaol;
 	}
@@ -186,10 +215,11 @@ public class VentanaPrincipal extends JFrame {
 			btnInicioIngls.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					localizar(new Locale("en"));
+					((CardLayout)contentPane.getLayout()).show(contentPane,"cartelera");
 				}
 			});
 			btnInicioIngls.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/modulo/img/banderaEn.jpg")));
-			btnInicioIngls.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+			btnInicioIngls.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 		}
 		return btnInicioIngls;
 	}
@@ -201,15 +231,16 @@ public class VentanaPrincipal extends JFrame {
 			panelCartelera.add(getLblCarteleraTitutlo(), BorderLayout.NORTH);
 			panelCartelera.add(getPanelCarteleraCentro(), BorderLayout.CENTER);
 			panelCartelera.add(getPanelCarteleraSur(), BorderLayout.SOUTH);
+			panelCartelera.add(getPanelCarteleraEste(), BorderLayout.EAST);
 		}
 		return panelCartelera;
 	}
 	private JLabel getLblCarteleraTitutlo() {
-		if (lblCarteleraTitutlo == null) {
-			lblCarteleraTitutlo = new JLabel("Cartelera Titutlo");
-			lblCarteleraTitutlo.setFont(new Font("Lucida Grande", Font.PLAIN, 45));
+		if (lblCarteleraTitulo == null) {
+			lblCarteleraTitulo = new JLabel("Cartelera Titutlo");
+			lblCarteleraTitulo.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_TITTLE_SIZE));
 		}
-		return lblCarteleraTitutlo;
+		return lblCarteleraTitulo;
 	}
 	private JPanel getPanelCarteleraCentro() {
 		if (panelCarteleraCentro == null) {
@@ -231,13 +262,16 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JTable getTablaCartelera() {
 		if (tablaCartelera == null) {
-			tablaCartelera = new JTable();
+			String[] nombreColumnas = {"Codigo","Zona","Localidad","Precio"};
+			modeloCartelera = new MiModeloTabla(nombreColumnas, 0);
+			tablaCartelera = new JTable(modeloCartelera);
 		}
 		return tablaCartelera;
 	}
 	private JPanel getPanelCarteleraSur() {
 		if (panelCarteleraSur == null) {
 			panelCarteleraSur = new JPanel();
+			panelCarteleraSur.setBackground(DEFAULT_COLOR);
 			panelCarteleraSur.setLayout(new GridLayout(0, 2, 0, 0));
 			panelCarteleraSur.add(getPanelCarteleraSurIzquierda());
 			panelCarteleraSur.add(getPanelCarteleraSurDerecha());
@@ -265,10 +299,11 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JButton getBtnCarteleraAtras() {
 		if (btnCarteleraAtras == null) {
-			btnCarteleraAtras = new JButton("New button");
-			btnCarteleraAtras.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+			btnCarteleraAtras = new JButton("Cartelera Atras");
+			btnCarteleraAtras.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 			btnCarteleraAtras.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					((CardLayout)contentPane.getLayout()).show(contentPane,"inicio");
 				}
 			});
 		}
@@ -277,8 +312,76 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnCarteleraSiguiente() {
 		if (btnCarteleraSiguiente == null) {
 			btnCarteleraSiguiente = new JButton("Cartelera Siguiente");
-			btnCarteleraSiguiente.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+			btnCarteleraSiguiente.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 		}
 		return btnCarteleraSiguiente;
+	}
+	private JPanel getPanelCarteleraEste() {
+		if (panelCarteleraEste == null) {
+			panelCarteleraEste = new JPanel();
+			panelCarteleraEste.setBackground(DEFAULT_COLOR);
+			panelCarteleraEste.setLayout(new GridLayout(2, 0, 0, 0));
+			panelCarteleraEste.add(getPanelCarteleraRecomendadas());
+			panelCarteleraEste.add(getPanelCarteleraDatos());
+		}
+		return panelCarteleraEste;
+	}
+	private JPanel getPanelCarteleraRecomendadas() {
+		if (panelCarteleraRecomendadas == null) {
+			panelCarteleraRecomendadas = new JPanel();
+			panelCarteleraRecomendadas.setBackground(DEFAULT_COLOR);
+			panelCarteleraRecomendadas.setLayout(new GridLayout(0, 2, 5, 5));
+			panelCarteleraRecomendadas.add(getLblCarteleraRecomendada1());
+			panelCarteleraRecomendadas.add(getLblCarteleraRecomendada2());
+		}
+		return panelCarteleraRecomendadas;
+	}
+	private JPanel getPanelCarteleraDatos() {
+		if (panelCarteleraDatos == null) {
+			panelCarteleraDatos = new JPanel();
+			panelCarteleraDatos.setBackground(DEFAULT_COLOR);
+			panelCarteleraDatos.setLayout(new GridLayout(2, 0, 0, 0));
+			panelCarteleraDatos.add(getPanelCarteleraPrecios());
+			panelCarteleraDatos.add(getPanelCarteleraPedido());
+		}
+		return panelCarteleraDatos;
+	}
+	private JPanel getPanelCarteleraPrecios() {
+		if (panelCarteleraPrecios == null) {
+			panelCarteleraPrecios = new JPanel();
+			panelCarteleraPrecios.setBackground(DEFAULT_COLOR);
+		}
+		return panelCarteleraPrecios;
+	}
+	private JPanel getPanelCarteleraPedido() {
+		if (panelCarteleraPedido == null) {
+			panelCarteleraPedido = new JPanel();
+			panelCarteleraPedido.setBackground(DEFAULT_COLOR);
+		}
+		return panelCarteleraPedido;
+	}
+	private JLabel getLblCarteleraRecomendada1() {
+		if (lblCarteleraRecomendada1 == null) {
+			lblCarteleraRecomendada1 = new JLabel("");
+			lblCarteleraRecomendada1.addComponentListener(new ComponentAdapter() {
+				@Override
+				public void componentResized(ComponentEvent e) {
+					adaptarImagen(lblCarteleraRecomendada1, gestor.getRecomendadas()[0].getRutaImagen());
+				}
+			});
+		}
+		return lblCarteleraRecomendada1;
+	}
+	private JLabel getLblCarteleraRecomendada2() {
+		if (lblCarteleraRecomendada2 == null) {
+			lblCarteleraRecomendada2 = new JLabel("");
+			lblCarteleraRecomendada2.addComponentListener(new ComponentAdapter() {
+				@Override
+				public void componentResized(ComponentEvent e) {
+					adaptarImagen(lblCarteleraRecomendada2, gestor.getRecomendadas()[0].getRutaImagen());
+				}
+			});
+		}
+		return lblCarteleraRecomendada2;
 	}
 }

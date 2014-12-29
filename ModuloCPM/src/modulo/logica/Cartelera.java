@@ -6,11 +6,24 @@ import java.util.ArrayList;
 
 public class Cartelera {
 	private ArrayList<Pelicula> peliculas;
+	private Pelicula[] recomendadas;
 	
 	public Cartelera(){
 		peliculas = new ArrayList<Pelicula>();
+		recomendadas = new Pelicula[2];
 		cargarCartelera();
+		generarRecomendadas();
 	}
+	protected Pelicula[] getRecomendadas(){
+		return recomendadas;
+	}
+	private void generarRecomendadas(){
+		recomendadas[0] = peliculas.get((int) (Math.random()*peliculas.size()));
+		do{
+			recomendadas[1] = peliculas.get((int) (Math.random()*peliculas.size()));
+		}while(!recomendadas[1].getCodigo().equals(recomendadas[0].getCodigo()));
+	}
+	
 	public ArrayList<Pelicula> getCartelera(){
 		return peliculas;
 	}

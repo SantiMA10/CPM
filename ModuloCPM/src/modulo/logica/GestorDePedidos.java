@@ -65,6 +65,10 @@ public class GestorDePedidos {
 			}
 		}
 	}
+	
+	public boolean isPedidoVacio(){
+		return pedido.size() == 0;
+	}
 
 	public String getNombreCine(){
 		return cine.getNombre();
@@ -74,5 +78,9 @@ public class GestorDePedidos {
 		for(int i = 0; i < getCartelera().size(); i++){
 			getCartelera().get(i).guardarSalas();
 		}
+	}
+	
+	public Pelicula[] getRecomendadas(){
+		return cine.getCartelera().getRecomendadas();
 	}
 }

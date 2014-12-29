@@ -42,6 +42,10 @@ public class Pelicula {
 		}		
 	}
 	
+	public String getRutaImagen(){
+		return "/modulo/img/"+getCodigo()+".jpg";
+	}
+	
 	public void guardarSalas() {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try{
