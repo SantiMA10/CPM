@@ -1,10 +1,8 @@
 package modulo.igu;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.EventQueue;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,6 +12,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import modulo.logica.*;
+import modulo.util.ImageUtil;
 import modulo.util.MiModeloTabla;
 
 import java.awt.CardLayout;
@@ -25,11 +24,8 @@ import java.awt.Font;
 import javax.swing.JButton;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
-
-import org.imgscalr.Scalr;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -45,6 +41,7 @@ import javax.swing.JTable;
 import java.awt.GridLayout;
 
 import javax.swing.border.TitledBorder;
+import javax.swing.ListSelectionModel;
 
 public class VentanaPrincipal extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -137,29 +134,6 @@ public class VentanaPrincipal extends JFrame {
 		TitledBorder borde = new TitledBorder(null, titulo, TitledBorder.LEADING, TitledBorder.TOP, null, null);
 		borde.setTitleFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BORDER_TITTLE_SIZE));
 		return borde;
-	}
-	
-	private void adaptarImagen(Component componente, String ruta){
-		if(componente instanceof JButton){
-			try{
-				JButton boton = (JButton) componente;
-				BufferedImage icono = ImageIO.read(VentanaPrincipal.class.getResource(ruta));
-				boton.setIcon(new ImageIcon(Scalr.resize(icono, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC,
-			               boton.getWidth(),  boton.getHeight())));
-			}catch(Exception e){
-				
-			}
-		}
-		else if(componente instanceof JLabel){
-			try{
-				JLabel label = (JLabel) componente;
-				BufferedImage icono = ImageIO.read(VentanaPrincipal.class.getResource(ruta));
-				label.setIcon(new ImageIcon(Scalr.resize(icono, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, 
-						label.getWidth(),  label.getHeight())));
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-		}
 	}
 
 	private JPanel getPanelInicial() {
@@ -262,11 +236,29 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JTable getTablaCartelera() {
 		if (tablaCartelera == null) {
-			String[] nombreColumnas = {"Codigo","Zona","Localidad","Precio"};
+			String[] nombreColumnas = {"Pelicula","Informacion","Oculto"};
 			modeloCartelera = new MiModeloTabla(nombreColumnas, 0);
 			tablaCartelera = new JTable(modeloCartelera);
+			tablaCartelera.getTableHeader().setReorderingAllowed(false);
+			tablaCartelera.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			prepararModeloCartelera();
 		}
 		return tablaCartelera;
+	}
+	private void prepararModeloCartelera(){
+		Object[] nuevaFila = new Object[3];
+		for(int i = 0; i < gestor.getCartelera().size(); i++){
+			nuevaFila[0] = ImageUtil.redimensionarImagen(gestor.getCartelera().get(i).getRutaImagen(), 432, 300);
+			System.out.println(((ImageIcon)nuevaFila[0]).getIconWidth());
+			nuevaFila[1] = gestor.getCartelera().get(i).getTitulo();
+			nuevaFila[2] = gestor.getCartelera().get(i);
+			modeloCartelera.addRow(nuevaFila);
+			tablaCartelera.setRowHeight(i, 300);
+		}
+		tablaCartelera.getColumnModel().getColumn(0).setMaxWidth(208);
+		tablaCartelera.getColumnModel().getColumn(0).setMinWidth(208);
+
+		tablaCartelera.getColumnModel().removeColumn(tablaCartelera.getColumnModel().getColumn(2));
 	}
 	private JPanel getPanelCarteleraSur() {
 		if (panelCarteleraSur == null) {
@@ -366,7 +358,7 @@ public class VentanaPrincipal extends JFrame {
 			lblCarteleraRecomendada1.addComponentListener(new ComponentAdapter() {
 				@Override
 				public void componentResized(ComponentEvent e) {
-					adaptarImagen(lblCarteleraRecomendada1, gestor.getRecomendadas()[0].getRutaImagen());
+					ImageUtil.adaptarImagen(lblCarteleraRecomendada1, gestor.getRecomendadas()[0].getRutaImagen());
 				}
 			});
 		}
@@ -378,7 +370,7 @@ public class VentanaPrincipal extends JFrame {
 			lblCarteleraRecomendada2.addComponentListener(new ComponentAdapter() {
 				@Override
 				public void componentResized(ComponentEvent e) {
-					adaptarImagen(lblCarteleraRecomendada2, gestor.getRecomendadas()[0].getRutaImagen());
+					ImageUtil.adaptarImagen(lblCarteleraRecomendada2, gestor.getRecomendadas()[0].getRutaImagen());
 				}
 			});
 		}
