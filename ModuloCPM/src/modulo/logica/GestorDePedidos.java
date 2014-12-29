@@ -35,8 +35,8 @@ public class GestorDePedidos {
 		return salaActual;
 	}
 	
-	public Pelicula cambiarFormato(boolean is3D){
-		if(is3D){
+	public Pelicula cambiarFormato(){
+		if(getPeliculaActual().isIs3D()){
 			return cine.getCartelera().hayEn2D(getPeliculaActual());
 		}
 		else{

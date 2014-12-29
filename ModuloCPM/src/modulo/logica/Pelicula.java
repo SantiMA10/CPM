@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -175,10 +176,16 @@ public class Pelicula {
 	public boolean isIs3D() {
 		return is3D;
 	}
-
+	public String getInformacion(ResourceBundle traduccion){
+		String informacion = "";
+		informacion += traduccion.getString("genero")+": "+getGenero()+"\n";
+		informacion += traduccion.getString("duracion")+": "+getDuracion()+" min.\n";
+		informacion += traduccion.getString("edadRecomendada")+": "+getEdadRecomendada();
+		return informacion;
+	}
 	public String toString(){
 		if(isIs3D()){
-			return getTitulo() + "3D";
+			return getTitulo() + " 3D";
 		}
 		return getTitulo();
 	}

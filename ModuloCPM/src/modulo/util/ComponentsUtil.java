@@ -1,9 +1,12 @@
 package modulo.util;
 
+import java.awt.Dimension;
 import java.awt.Font;
 
+import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.JTableHeader;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -29,5 +32,11 @@ public class ComponentsUtil {
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
 		
 		return textPane;
+	}
+	
+	public static void changeJTableHeaderSize(JTable tabla){
+		JTableHeader header = tabla.getTableHeader();
+		header.setPreferredSize(new Dimension(100, VentanaPrincipal.TABLE_HEADER_HEIGHT));
+		header.setFont(new Font("Lucida Grande", Font.PLAIN, VentanaPrincipal.TABLE_HEADER_SIZE));
 	}
 }
