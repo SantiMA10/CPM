@@ -25,6 +25,7 @@ public class Pelicula {
 	private String nombreSala;
 	private ArrayList<Sala> salas;
 	private boolean is3D;
+	private String trailerID;
 	
 	public Pelicula(String codigo, String titulo, String sinopsis, String genero, int duracion, 
 			String edadRecomendada, String fechas, String horas, String nombreSala, String is3D){
@@ -188,6 +189,14 @@ public class Pelicula {
 			return getTitulo() + " 3D";
 		}
 		return getTitulo();
+	}
+
+	public String getTrailerID() {
+		return trailerID;
+	}
+
+	public void setTrailerID(String trailerID) {
+		this.trailerID = trailerID;
 	}
 	
 }

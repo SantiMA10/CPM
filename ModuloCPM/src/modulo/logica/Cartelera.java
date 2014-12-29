@@ -13,6 +13,7 @@ public class Cartelera {
 		recomendadas = new Pelicula[2];
 		cargarCartelera();
 		generarRecomendadas();
+		cargarTrailers();
 	}
 	protected Pelicula[] getRecomendadas(){
 		return recomendadas;
@@ -42,6 +43,26 @@ public class Cartelera {
 	    	fichero.close();
 	    	}catch (Exception e) {
 	    		e.printStackTrace();
+	    	}
+	}
+	public void cargarTrailers(){
+		String linea = "";
+	    try {
+	    	BufferedReader fichero = new BufferedReader(new FileReader("data/trailers.dat"));
+	    	while (fichero.ready()) {
+	    		linea = fichero.readLine();
+	    		if(!linea.isEmpty()){
+		    		String[] trailers = linea.split(";");
+		    		for(int i = 0; i < peliculas.size(); i++){
+		    			if(peliculas.get(i).getCodigo().equals(trailers[0])){
+		    				peliculas.get(i).setTrailerID(trailers[1]);
+		    			}
+		    		}
+	    		}
+	    	}
+	    	fichero.close();
+	    	}catch (Exception e) {
+	    		System.err.println("Archivo de trailers no encontrado");
 	    	}
 	}
 	public Pelicula hayEn3D(Pelicula pelicula){

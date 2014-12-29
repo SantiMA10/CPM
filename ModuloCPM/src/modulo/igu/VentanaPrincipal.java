@@ -1,11 +1,13 @@
 package modulo.igu;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.EventQueue;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.SimpleAttributeSet;
@@ -33,6 +35,8 @@ import javax.swing.ImageIcon;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.FlowLayout;
+import java.io.IOException;
+import java.net.URI;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.awt.event.ActionListener;
@@ -56,7 +60,7 @@ import javax.swing.SwingConstants;
 public class VentanaPrincipal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	public static Color DEFAULT_COLOR = new Color(32, 178, 170);
-	public static final int DEFAULT_BUTTON_SIZE = 35;//35
+	public static final int DEFAULT_BUTTON_SIZE = 18;//35
 	public static final int DEFAULT_TITTLE_SIZE = 60;
 	public static final int DEFAULT_TEXTAREA_SIZE = 25;
 	public static final int DEFAULT_BORDER_TITTLE_SIZE = 30;
@@ -669,10 +673,34 @@ public class VentanaPrincipal extends JFrame {
 		else{
 			btnPeliculaFormato.setVisible(false);
 		}
+		if(gestor.getPeliculaActual().getTrailerID() != null){
+			btnPeliculaVerTrailer.setEnabled(true);
+		}
+		else{
+			btnPeliculaVerTrailer.setEnabled(false);
+		}
+	}
+	private void openOnYouTube(String id) {
+	    if (Desktop.isDesktopSupported() && !id.isEmpty()) {
+	      try{
+	    	  URI url = new URI("http://www.youtube.com/v/" + id);
+	    	  Desktop.getDesktop().browse(url);
+	      }catch (Exception e) { 
+	    	  e.printStackTrace();
+	      }
+	    }
+	    else{
+	    	JOptionPane.showMessageDialog(this, traduccion.getString("errorYouTube"), traduccion.getString("error"), JOptionPane.WARNING_MESSAGE);
+	    }
 	}
 	private JButton getBtnPeliculaVerTrailer() {
 		if (btnPeliculaVerTrailer == null) {
 			btnPeliculaVerTrailer = new JButton("Pelicula Ver Trailer");
+			btnPeliculaVerTrailer.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					openOnYouTube(gestor.getPeliculaActual().getTrailerID());
+				}
+			});
 			btnPeliculaVerTrailer.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 		}
 		return btnPeliculaVerTrailer;
