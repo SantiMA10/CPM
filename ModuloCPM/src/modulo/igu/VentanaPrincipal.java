@@ -35,6 +35,10 @@ import org.imgscalr.Scalr;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.FlowLayout;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaPrincipal extends JFrame {
 	private static Color DEFAUL_COLOR = new Color(32, 178, 170);
@@ -44,11 +48,10 @@ public class VentanaPrincipal extends JFrame {
 	private GestorDePedidos gestor;
 	private JPanel panelInicial;
 	private JTextPane txtpnBienvenidosA;
-	private JPanel panel;
-	private JButton btnEspaol;
-	private JButton btnIngls;
-	private JLabel lblMelon;
-	private JPanel panel_1;
+	private JPanel panelInicialNorte;
+	private JButton btnInicioEspaol;
+	private JButton btnInicioIngls;
+	private ResourceBundle traduccion;
 
 	/**
 	 * Launch the application.
@@ -82,6 +85,18 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelInicial(), "inicial");
 	}
 	
+	private void localizar(Locale localizacion){
+		if(localizacion == null){
+			localizacion = Locale.getDefault(Locale.Category.FORMAT);
+		}
+		traduccion = ResourceBundle.getBundle("modulo.traducciones/traduccion", localizacion);
+		//Inicio
+		txtpnBienvenidosA.setText(traduccion.getString("bienvenidos") + " " + gestor.getNombreCine());
+		btnInicioEspaol.setText(traduccion.getString("btnEs"));
+		btnInicioIngls.setText(traduccion.getString("btnEn"));
+		
+	}
+	
 	private void adaptarImagen(Component componente, String ruta){
 		if(componente instanceof JButton){
 			try{
@@ -108,10 +123,10 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanelInicial() {
 		if (panelInicial == null) {
 			panelInicial = new JPanel();
+			panelInicial.setBackground(DEFAUL_COLOR);
 			panelInicial.setLayout(new BorderLayout(0, 0));
-			panelInicial.add(getPanel(), BorderLayout.SOUTH);
-			panelInicial.add(getTxtpnBienvenidosA(), BorderLayout.NORTH);
-			panelInicial.add(getPanel_1(), BorderLayout.CENTER);
+			panelInicial.add(getTxtpnBienvenidosA(), BorderLayout.CENTER);
+			panelInicial.add(getPanelInicialNorte(), BorderLayout.SOUTH);
 		}
 		return panelInicial;
 	}
@@ -122,7 +137,6 @@ public class VentanaPrincipal extends JFrame {
 			txtpnBienvenidosA.setFont(new Font("Lucida Grande", Font.PLAIN, 40));
 			txtpnBienvenidosA.setEditable(false);
 			txtpnBienvenidosA.setText("Bienvenidos a "+gestor.getNombreCine());
-			System.out.println(txtpnBienvenidosA.getHeight());
 			StyledDocument doc = txtpnBienvenidosA.getStyledDocument();
 			SimpleAttributeSet center = new SimpleAttributeSet();
 			StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
@@ -130,49 +144,39 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return txtpnBienvenidosA;
 	}
-	private JPanel getPanel() {
-		if (panel == null) {
-			panel = new JPanel();
-			panel.setBackground(DEFAUL_COLOR);
-			panel.add(getBtnEspaol());
-			panel.add(getBtnIngls());
+	private JPanel getPanelInicialNorte() {
+		if (panelInicialNorte == null) {
+			panelInicialNorte = new JPanel();
+			panelInicialNorte.setBackground(DEFAUL_COLOR);
+			panelInicialNorte.add(getBtnInicioEspaol());
+			panelInicialNorte.add(getBtnInicioIngls());
 		}
-		return panel;
+		return panelInicialNorte;
 	}
-	private JButton getBtnEspaol() {
-		if (btnEspaol == null) {
-			btnEspaol = new JButton("Espa\u00F1ol");
-			btnEspaol.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/modulo/img/banderaEs.jpg")));
-			btnEspaol.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		}
-		return btnEspaol;
-	}
-	private JButton getBtnIngls() {
-		if (btnIngls == null) {
-			btnIngls = new JButton("Ingl\u00E9s");
-			btnIngls.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/modulo/img/banderaEn.jpg")));
-			btnIngls.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		}
-		return btnIngls;
-	}
-	private JLabel getLblMelon() {
-		if (lblMelon == null) {
-			lblMelon = new JLabel("");
-			lblMelon.addComponentListener(new ComponentAdapter() {
-				@Override
-				public void componentResized(ComponentEvent e) {
-					adaptarImagen((JLabel) e.getSource(), "/modulo/img/AMP0001.jpg");
+	private JButton getBtnInicioEspaol() {
+		if (btnInicioEspaol == null) {
+			btnInicioEspaol = new JButton("Espa\u00F1ol");
+			btnInicioEspaol.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					localizar(new Locale("es"));
 				}
 			});
+			btnInicioEspaol.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/modulo/img/banderaEs.jpg")));
+			btnInicioEspaol.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		}
-		return lblMelon;
+		return btnInicioEspaol;
 	}
-	private JPanel getPanel_1() {
-		if (panel_1 == null) {
-			panel_1 = new JPanel();
-			panel_1.setLayout(new BorderLayout(0, 0));
-			panel_1.add(getLblMelon());
+	private JButton getBtnInicioIngls() {
+		if (btnInicioIngls == null) {
+			btnInicioIngls = new JButton("Ingl\u00E9s");
+			btnInicioIngls.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					localizar(new Locale("en"));
+				}
+			});
+			btnInicioIngls.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/modulo/img/banderaEn.jpg")));
+			btnInicioIngls.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		}
-		return panel_1;
+		return btnInicioIngls;
 	}
 }
