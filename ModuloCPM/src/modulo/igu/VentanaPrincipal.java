@@ -12,7 +12,9 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import modulo.logica.*;
+import modulo.util.ComponentsUtil;
 import modulo.util.ImageUtil;
+import modulo.util.MiCellRender;
 import modulo.util.MiModeloTabla;
 
 import java.awt.CardLayout;
@@ -48,7 +50,7 @@ public class VentanaPrincipal extends JFrame {
 	private static Color DEFAULT_COLOR = new Color(32, 178, 170);
 	private static final int DEFAULT_BUTTON_SIZE = 18;
 	private static final int DEFAULT_TITTLE_SIZE = 40;
-	private static final int DEFAULT_BORDER_TITTLE_SIZE = 25;
+	public static final int DEFAULT_BORDER_TITTLE_SIZE = 25;
 	
 	private JPanel contentPane;
 	private GestorDePedidos gestor;
@@ -123,17 +125,10 @@ public class VentanaPrincipal extends JFrame {
 		lblCarteleraTitulo.setText(traduccion.getString("cartelera"));
 		btnCarteleraAtras.setText(traduccion.getString("btnAtras"));
 		btnCarteleraSiguiente.setText(traduccion.getString("btnSiguiente"));
-		panelCarteleraRecomendadas.setBorder(getBorder(traduccion.getString("recomendadas")));
-		panelCarteleraPrecios.setBorder(getBorder(traduccion.getString("precios")));
-		panelCarteleraPedido.setBorder(getBorder(traduccion.getString("pedido")));
-
+		panelCarteleraRecomendadas.setBorder(ComponentsUtil.getBorder(traduccion.getString("recomendadas")));
+		panelCarteleraPrecios.setBorder(ComponentsUtil.getBorder(traduccion.getString("precios")));
+		panelCarteleraPedido.setBorder(ComponentsUtil.getBorder(traduccion.getString("pedido")));
 		
-	}
-	
-	private TitledBorder getBorder(String titulo){
-		TitledBorder borde = new TitledBorder(null, titulo, TitledBorder.LEADING, TitledBorder.TOP, null, null);
-		borde.setTitleFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BORDER_TITTLE_SIZE));
-		return borde;
 	}
 
 	private JPanel getPanelInicial() {
@@ -242,6 +237,8 @@ public class VentanaPrincipal extends JFrame {
 			tablaCartelera.getTableHeader().setReorderingAllowed(false);
 			tablaCartelera.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			prepararModeloCartelera();
+			tablaCartelera.setDefaultRenderer(JTextPane.class,  new MiCellRender());
+			
 		}
 		return tablaCartelera;
 	}
@@ -249,8 +246,8 @@ public class VentanaPrincipal extends JFrame {
 		Object[] nuevaFila = new Object[3];
 		for(int i = 0; i < gestor.getCartelera().size(); i++){
 			nuevaFila[0] = ImageUtil.redimensionarImagen(gestor.getCartelera().get(i).getRutaImagen(), 432, 300);
-			System.out.println(((ImageIcon)nuevaFila[0]).getIconWidth());
-			nuevaFila[1] = gestor.getCartelera().get(i).getTitulo();
+			nuevaFila[1] = ComponentsUtil.getJTextPane(gestor.getCartelera().get(i).getTitulo() + "\n" + 
+			gestor.getCartelera().get(i).getNombreSala());
 			nuevaFila[2] = gestor.getCartelera().get(i);
 			modeloCartelera.addRow(nuevaFila);
 			tablaCartelera.setRowHeight(i, 300);
