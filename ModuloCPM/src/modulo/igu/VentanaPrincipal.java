@@ -92,6 +92,19 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panelCarteleraPedidoSur;
 	private JButton btnCarteleraIrPedido;
 	private JTextArea txtrCarteleraPrecios;
+	private JPanel panelPelicula;
+	private JLabel lblPeliculaTitulo;
+	private JPanel panelPeliculaSur;
+	private JPanel panelPeliculaSurIzquierda;
+	private JPanel panelPeliculaSurDerecha;
+	private JButton btnPeliculaAtras;
+	private JButton btnPeliculaSiguiente;
+	private JPanel panelPeliculaOeste;
+	private JPanel panelPeliculaCentro;
+	private JPanel panelPeliculaInformacion;
+	private JPanel panelPeliculaSinopsis;
+	private JLabel lblPeliculaImagen;
+	private JButton btnPeliculaVerTrailer;
 
 	/**
 	 * Launch the application.
@@ -122,8 +135,9 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));
-		contentPane.add(getPanelInicial(), "inicio");
+		contentPane.add(getPanelInicial(), "inicial");
 		contentPane.add(getPanelCartelera(), "cartelera");
+		contentPane.add(getPanelPelicula(), "pelicula");
 	}
 	
 	private void localizar(Locale localizacion){
@@ -326,7 +340,7 @@ public class VentanaPrincipal extends JFrame {
 			btnCarteleraAtras.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 			btnCarteleraAtras.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					((CardLayout)contentPane.getLayout()).show(contentPane,"inicio");
+					((CardLayout)contentPane.getLayout()).show(contentPane,"inicial");
 				}
 			});
 		}
@@ -340,6 +354,8 @@ public class VentanaPrincipal extends JFrame {
 					int fila = tablaCartelera.getSelectedRow();
 					if(fila != -1){
 						gestor.setPeliculaActual((Pelicula) modeloCartelera.getValueAt(fila, 2));
+						prepararPanelPelicula();
+						((CardLayout)contentPane.getLayout()).show(contentPane,"pelicula");
 					}
 				}
 			});
@@ -445,7 +461,7 @@ public class VentanaPrincipal extends JFrame {
 	private JList<Pelicula> getListaPedido() {
 		if (listaPedido == null) {
 			modeloListaPedido = new DefaultListModel<Pelicula>();
-			listaPedido = new JList<Pelicula>();
+			listaPedido = new JList<Pelicula>(modeloListaPedido);
 		}
 		return listaPedido;
 	}
@@ -470,5 +486,115 @@ public class VentanaPrincipal extends JFrame {
 			txtrCarteleraPrecios.setText("Cartelera Precios");
 		}
 		return txtrCarteleraPrecios;
+	}
+	private JPanel getPanelPelicula() {
+		if (panelPelicula == null) {
+			panelPelicula = new JPanel();
+			panelPelicula.setBackground(DEFAULT_COLOR);
+			panelPelicula.setLayout(new BorderLayout(0, 0));
+			panelPelicula.add(getLblPeliculaTitulo(), BorderLayout.NORTH);
+			panelPelicula.add(getPanelPeliculaSur(), BorderLayout.SOUTH);
+			panelPelicula.add(getPanelPeliculaOeste(), BorderLayout.WEST);
+			panelPelicula.add(getPanelPeliculaCentro(), BorderLayout.CENTER);
+		}
+		return panelPelicula;
+	}
+	private JLabel getLblPeliculaTitulo() {
+		if (lblPeliculaTitulo == null) {
+			lblPeliculaTitulo = new JLabel("Pelicula Titulo");
+			lblPeliculaTitulo.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_TITTLE_SIZE));
+		}
+		return lblPeliculaTitulo;
+	}
+	private JPanel getPanelPeliculaSur() {
+		if (panelPeliculaSur == null) {
+			panelPeliculaSur = new JPanel();
+			panelPeliculaSur.setBackground(DEFAULT_COLOR);
+			panelPeliculaSur.setLayout(new GridLayout(0, 2, 0, 0));
+			panelPeliculaSur.add(getPanelPeliculaSurIzquierda());
+			panelPeliculaSur.add(getPanelPeliculaSurDerecha());
+		}
+		return panelPeliculaSur;
+	}
+	private JPanel getPanelPeliculaSurIzquierda() {
+		if (panelPeliculaSurIzquierda == null) {
+			panelPeliculaSurIzquierda = new JPanel();
+			panelPeliculaSurIzquierda.setBackground(DEFAULT_COLOR);
+			panelPeliculaSurIzquierda.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+			panelPeliculaSurIzquierda.add(getBtnPeliculaAtras());
+		}
+		return panelPeliculaSurIzquierda;
+	}
+	private JPanel getPanelPeliculaSurDerecha() {
+		if (panelPeliculaSurDerecha == null) {
+			panelPeliculaSurDerecha = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) panelPeliculaSurDerecha.getLayout();
+			flowLayout.setAlignment(FlowLayout.RIGHT);
+			panelPeliculaSurDerecha.setBackground(DEFAULT_COLOR);
+			panelPeliculaSurDerecha.add(getBtnPeliculaSiguiente());
+		}
+		return panelPeliculaSurDerecha;
+	}
+	private JButton getBtnPeliculaAtras() {
+		if (btnPeliculaAtras == null) {
+			btnPeliculaAtras = new JButton("Pelicula Atras");
+		}
+		return btnPeliculaAtras;
+	}
+	private JButton getBtnPeliculaSiguiente() {
+		if (btnPeliculaSiguiente == null) {
+			btnPeliculaSiguiente = new JButton("Pelicula Siguiente");
+		}
+		return btnPeliculaSiguiente;
+	}
+	private JPanel getPanelPeliculaOeste() {
+		if (panelPeliculaOeste == null) {
+			panelPeliculaOeste = new JPanel();
+			panelPeliculaOeste.setBackground(DEFAULT_COLOR);
+			panelPeliculaOeste.setLayout(new BorderLayout(0, 0));
+			panelPeliculaOeste.add(getLblPeliculaImagen());
+			panelPeliculaOeste.add(getBtnPeliculaVerTrailer(), BorderLayout.SOUTH);
+		}
+		return panelPeliculaOeste;
+	}
+	private JPanel getPanelPeliculaCentro() {
+		if (panelPeliculaCentro == null) {
+			panelPeliculaCentro = new JPanel();
+			panelPeliculaCentro.setBackground(DEFAULT_COLOR);
+			panelPeliculaCentro.setLayout(new GridLayout(2, 0, 0, 0));
+			panelPeliculaCentro.add(getPanelPeliculaInformacion());
+			panelPeliculaCentro.add(getPanelPeliculaSinopsis());
+		}
+		return panelPeliculaCentro;
+	}
+	private JPanel getPanelPeliculaInformacion() {
+		if (panelPeliculaInformacion == null) {
+			panelPeliculaInformacion = new JPanel();
+			panelPeliculaInformacion.setBackground(DEFAULT_COLOR);
+		}
+		return panelPeliculaInformacion;
+	}
+	private JPanel getPanelPeliculaSinopsis() {
+		if (panelPeliculaSinopsis == null) {
+			panelPeliculaSinopsis = new JPanel();
+			panelPeliculaSinopsis.setBackground(DEFAULT_COLOR);
+		}
+		return panelPeliculaSinopsis;
+	}
+	private JLabel getLblPeliculaImagen() {
+		if (lblPeliculaImagen == null) {
+			lblPeliculaImagen = new JLabel("");
+			lblPeliculaImagen.setHorizontalAlignment(SwingConstants.CENTER);
+		}
+		return lblPeliculaImagen;
+	}
+	private void prepararPanelPelicula(){
+		ImageUtil.adaptarImagen(lblPeliculaImagen, gestor.getPeliculaActual().getRutaImagen());
+	}
+	private JButton getBtnPeliculaVerTrailer() {
+		if (btnPeliculaVerTrailer == null) {
+			btnPeliculaVerTrailer = new JButton("Pelicula Ver Trailer");
+		}
+		return btnPeliculaVerTrailer;
 	}
 }
