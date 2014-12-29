@@ -39,19 +39,32 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import java.awt.GridLayout;
 
 public class VentanaPrincipal extends JFrame {
-	private static Color DEFAUL_COLOR = new Color(32, 178, 170);
+	private static Color DEFAULT_COLOR = new Color(32, 178, 170);
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private GestorDePedidos gestor;
 	private JPanel panelInicial;
 	private JTextPane txtpnBienvenidosA;
-	private JPanel panelInicialNorte;
+	private JPanel panelInicialSur;
 	private JButton btnInicioEspaol;
 	private JButton btnInicioIngls;
 	private ResourceBundle traduccion;
+	private JPanel panelCartelera;
+	private JLabel lblCarteleraTitutlo;
+	private JPanel panelCarteleraCentro;
+	private JScrollPane scrollPaneTablaCartelera;
+	private JTable tablaCartelera;
+	private JPanel panelCarteleraSur;
+	private JPanel panelCarteleraSurIzquierda;
+	private JPanel panelCarteleraSurDerecha;
+	private JButton btnCarteleraAtras;
+	private JButton btnCarteleraSiguiente;
 
 	/**
 	 * Launch the application.
@@ -78,11 +91,12 @@ public class VentanaPrincipal extends JFrame {
 		setTitle(gestor.getNombreCine());
 		setBounds(100, 100, 805, 481);
 		contentPane = new JPanel();
-		contentPane.setBackground(DEFAUL_COLOR);
+		contentPane.setBackground(DEFAULT_COLOR);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));
 		contentPane.add(getPanelInicial(), "inicial");
+		contentPane.add(getPanelCartelera(), "name_1419811776191793000");
 	}
 	
 	private void localizar(Locale localizacion){
@@ -123,17 +137,17 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanelInicial() {
 		if (panelInicial == null) {
 			panelInicial = new JPanel();
-			panelInicial.setBackground(DEFAUL_COLOR);
+			panelInicial.setBackground(DEFAULT_COLOR);
 			panelInicial.setLayout(new BorderLayout(0, 0));
 			panelInicial.add(getTxtpnBienvenidosA(), BorderLayout.CENTER);
-			panelInicial.add(getPanelInicialNorte(), BorderLayout.SOUTH);
+			panelInicial.add(getPanelInicialSur(), BorderLayout.SOUTH);
 		}
 		return panelInicial;
 	}
 	private JTextPane getTxtpnBienvenidosA() {
 		if (txtpnBienvenidosA == null) {
 			txtpnBienvenidosA = new JTextPane();
-			txtpnBienvenidosA.setBackground(DEFAUL_COLOR);
+			txtpnBienvenidosA.setBackground(DEFAULT_COLOR);
 			txtpnBienvenidosA.setFont(new Font("Lucida Grande", Font.PLAIN, 40));
 			txtpnBienvenidosA.setEditable(false);
 			txtpnBienvenidosA.setText("Bienvenidos a "+gestor.getNombreCine());
@@ -144,14 +158,14 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return txtpnBienvenidosA;
 	}
-	private JPanel getPanelInicialNorte() {
-		if (panelInicialNorte == null) {
-			panelInicialNorte = new JPanel();
-			panelInicialNorte.setBackground(DEFAUL_COLOR);
-			panelInicialNorte.add(getBtnInicioEspaol());
-			panelInicialNorte.add(getBtnInicioIngls());
+	private JPanel getPanelInicialSur() {
+		if (panelInicialSur == null) {
+			panelInicialSur = new JPanel();
+			panelInicialSur.setBackground(DEFAULT_COLOR);
+			panelInicialSur.add(getBtnInicioEspaol());
+			panelInicialSur.add(getBtnInicioIngls());
 		}
-		return panelInicialNorte;
+		return panelInicialSur;
 	}
 	private JButton getBtnInicioEspaol() {
 		if (btnInicioEspaol == null) {
@@ -178,5 +192,93 @@ public class VentanaPrincipal extends JFrame {
 			btnInicioIngls.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		}
 		return btnInicioIngls;
+	}
+	private JPanel getPanelCartelera() {
+		if (panelCartelera == null) {
+			panelCartelera = new JPanel();
+			panelCartelera.setBackground(DEFAULT_COLOR);
+			panelCartelera.setLayout(new BorderLayout(0, 0));
+			panelCartelera.add(getLblCarteleraTitutlo(), BorderLayout.NORTH);
+			panelCartelera.add(getPanelCarteleraCentro(), BorderLayout.CENTER);
+			panelCartelera.add(getPanelCarteleraSur(), BorderLayout.SOUTH);
+		}
+		return panelCartelera;
+	}
+	private JLabel getLblCarteleraTitutlo() {
+		if (lblCarteleraTitutlo == null) {
+			lblCarteleraTitutlo = new JLabel("Cartelera Titutlo");
+			lblCarteleraTitutlo.setFont(new Font("Lucida Grande", Font.PLAIN, 45));
+		}
+		return lblCarteleraTitutlo;
+	}
+	private JPanel getPanelCarteleraCentro() {
+		if (panelCarteleraCentro == null) {
+			panelCarteleraCentro = new JPanel();
+			panelCarteleraCentro.setBackground(DEFAULT_COLOR);
+			panelCarteleraCentro.setLayout(new BorderLayout(0, 0));
+			panelCarteleraCentro.add(getScrollPaneTablaCartelera(), BorderLayout.CENTER);
+		}
+		return panelCarteleraCentro;
+	}
+	private JScrollPane getScrollPaneTablaCartelera() {
+		if (scrollPaneTablaCartelera == null) {
+			scrollPaneTablaCartelera = new JScrollPane();
+			scrollPaneTablaCartelera.setOpaque(false);
+			scrollPaneTablaCartelera.setBackground(DEFAULT_COLOR);
+			scrollPaneTablaCartelera.setViewportView(getTablaCartelera());
+		}
+		return scrollPaneTablaCartelera;
+	}
+	private JTable getTablaCartelera() {
+		if (tablaCartelera == null) {
+			tablaCartelera = new JTable();
+		}
+		return tablaCartelera;
+	}
+	private JPanel getPanelCarteleraSur() {
+		if (panelCarteleraSur == null) {
+			panelCarteleraSur = new JPanel();
+			panelCarteleraSur.setLayout(new GridLayout(0, 2, 0, 0));
+			panelCarteleraSur.add(getPanelCarteleraSurIzquierda());
+			panelCarteleraSur.add(getPanelCarteleraSurDerecha());
+		}
+		return panelCarteleraSur;
+	}
+	private JPanel getPanelCarteleraSurIzquierda() {
+		if (panelCarteleraSurIzquierda == null) {
+			panelCarteleraSurIzquierda = new JPanel();
+			panelCarteleraSurIzquierda.setBackground(DEFAULT_COLOR);
+			panelCarteleraSurIzquierda.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+			panelCarteleraSurIzquierda.add(getBtnCarteleraAtras());
+		}
+		return panelCarteleraSurIzquierda;
+	}
+	private JPanel getPanelCarteleraSurDerecha() {
+		if (panelCarteleraSurDerecha == null) {
+			panelCarteleraSurDerecha = new JPanel();
+			panelCarteleraSurDerecha.setBackground(DEFAULT_COLOR);
+			FlowLayout flowLayout = (FlowLayout) panelCarteleraSurDerecha.getLayout();
+			flowLayout.setAlignment(FlowLayout.RIGHT);
+			panelCarteleraSurDerecha.add(getBtnCarteleraSiguiente());
+		}
+		return panelCarteleraSurDerecha;
+	}
+	private JButton getBtnCarteleraAtras() {
+		if (btnCarteleraAtras == null) {
+			btnCarteleraAtras = new JButton("New button");
+			btnCarteleraAtras.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+			btnCarteleraAtras.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+		}
+		return btnCarteleraAtras;
+	}
+	private JButton getBtnCarteleraSiguiente() {
+		if (btnCarteleraSiguiente == null) {
+			btnCarteleraSiguiente = new JButton("Cartelera Siguiente");
+			btnCarteleraSiguiente.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		}
+		return btnCarteleraSiguiente;
 	}
 }
