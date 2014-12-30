@@ -48,13 +48,15 @@ public class GestorDePedidos {
 		this.salaActual = salaActual;
 	}
 
-	public void comprarEntrada(int fila, int butaca, int tipo){
+	public boolean comprarEntrada(int fila, int butaca, int tipo){
 		Sala sala = peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
 		Entrada entrada = sala.cambiarTipoDeEntrada(fila, butaca, tipo);
 		if(entrada != null){
-			System.out.println("Entrada comprada :)");
+			//System.out.println("Entrada comprada :)");
 			pedido.add(entrada);
+			return true;
 		}
+		return false;
 	}
 	
 	public void quitarEntrada(int fila, int butaca){

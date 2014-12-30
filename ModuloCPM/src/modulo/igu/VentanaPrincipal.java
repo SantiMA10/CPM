@@ -64,6 +64,8 @@ import com.toedter.calendar.JCalendar;
 import java.awt.Component;
 
 import javax.swing.Box;
+import javax.swing.JCheckBox;
+import javax.swing.JTextField;
 
 
 public class VentanaPrincipal extends JFrame {
@@ -146,6 +148,89 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblHorarioImagen;
 	private Component horizontalGlue;
 	private JPanel panelHorarioJCalendar;
+	private JPanel panelSala;
+	private JPanel panelSalaNorte;
+	private JPanel panelSalaSur;
+	private JPanel panelSalaSurDerecha;
+	private JPanel panelSalaSurCentro;
+	private JPanel panelSalaSurIzquierda;
+	private JPanel panelSalaEste;
+	private JPanel panelSalaEsteLeyenda;
+	private JPanel panelSalaEsteAbajo;
+	private JPanel panelSalaTipoEntrada;
+	private JPanel panelSalaPedido;
+	private JButton btnSalaAtras;
+	private JButton btnSalaVolverCartelera;
+	private JButton btnSalaSiguiente;
+	private JLabel lblSalaTitulo;
+	private JLabel lblSalaSesion;
+	private JLabel lblLeyendaLibre;
+	private JLabel lblLeyendaLibreImagen;
+	private JLabel lblLeyendaOcupado;
+	private JLabel lblLeyendaOcupadoImagen;
+	private JLabel lblLeyendaNormal;
+	private JLabel lblLeyendaNormalImagen;
+	private JLabel lblLeyendaJubilado;
+	private JLabel lblLeyendaJubiladoImagen;
+	private JLabel lblLeyendaCumple;
+	private JLabel lblLeyendaCumpleImagen;
+	private JLabel lblLeyendaJubicumpleImagen;
+	private JPanel panelSalaTipoEntradaCheck;
+	private JCheckBox chckbxJubilado;
+	private JCheckBox chckbxCumple;
+	private JScrollPane scrollPaneTipoEntrada;
+	private JTextArea txtrTipoEntrada;
+	private JPanel panelSalaPedidoTotal;
+	private JScrollPane scrollPanelSalaPedido;
+	private JTextArea txtrSalaPedido;
+	private JLabel lblEntradasTotales;
+	private JTextField txtEntradasTotales;
+	private JTextArea txtrLeyendaJubiCumple;
+	private JPanel panelSalaCentro;
+	private JButton btnButaca;
+	private JButton btnButaca_1;
+	private JButton btnButaca_2;
+	private JButton btnButaca_3;
+	private JButton btnButaca_4;
+	private Component horizontalGluePasillo3;
+	private JButton btnButaca_5;
+	private JButton btnButaca_6;
+	private JButton btnButaca_7;
+	private JButton btnButaca_8;
+	private JButton btnButaca_9;
+	private Component horizontalGlueHueco2I;
+	private JButton btnButaca_10;
+	private JButton btnButaca_11;
+	private JButton btnButuca;
+	private JButton btnButaca_12;
+	private Component horizontalGluePasillo2;
+	private JButton btnButaca_13;
+	private JButton btnButaca_14;
+	private JButton btnButaca_15;
+	private JButton btnButaca_16;
+	private Component horizontalGlueHueco2D;
+	private Component horizontalGlueHueco1I;
+	private JButton btnButaca_18;
+	private JButton btnButaca_19;
+	private JButton btnButaca_20;
+	private JButton btnButaca_21;
+	private Component horizontalGluePasillo1;
+	private JButton btnButaca_22;
+	private JButton btnButaca_23;
+	private JButton btnButaca_24;
+	private JButton btnButaca_25;
+	private Component horizontalGlueHueco1D;
+	private Component horizontalGlueHueco0I2;
+	private Component horizontalGlueHueco0I1;
+	private Component horizontalGlueHueco0I0;
+	private JButton btnButaca_17;
+	private JButton btnButaca_26;
+	private Component horizontalGluePasillo0;
+	private JButton btnButaca_27;
+	private JButton btnButaca_28;
+	private Component horizontalGlueHueco0D0;
+	private Component horizontalGlueHueco0D1;
+	private Component horizontalGlueHueco0D2;
 
 
 	/**
@@ -181,6 +266,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelCartelera(), "cartelera");
 		contentPane.add(getPanelPelicula(), "pelicula");
 		contentPane.add(getPanelHorario(), "horario");
+		contentPane.add(getPanelSala(), "sala");
 	}
 	
 	private void localizar(Locale localizacion){
@@ -215,7 +301,24 @@ public class VentanaPrincipal extends JFrame {
 		btnHorarioSiguiente.setText(traduccion.getString("btnSiguiente"));
 		lblHorarioTitulo.setText(traduccion.getString("horario"));
 		panelHorarioJCalendar.setBorder(ComponentsUtil.getBorder(traduccion.getString("calendario")));
-
+		//Sala
+		panelSalaEsteLeyenda.setBorder(ComponentsUtil.getBorder(traduccion.getString("leyenda")));
+		panelSalaTipoEntrada.setBorder(ComponentsUtil.getBorder(traduccion.getString("tipoEntrada")));
+		panelSalaPedido.setBorder(ComponentsUtil.getBorder(traduccion.getString("pedidoActual")));
+		lblLeyendaLibre.setText(traduccion.getString("libre"));
+		lblLeyendaOcupado.setText(traduccion.getString("ocupado"));
+		lblLeyendaNormal.setText(traduccion.getString("normal"));
+		lblLeyendaJubilado.setText(traduccion.getString("jubilado"));
+		lblLeyendaCumple.setText(traduccion.getString("cumple"));
+		txtrLeyendaJubiCumple.setText(traduccion.getString("jubicumple"));
+		chckbxCumple.setText(traduccion.getString("cumple"));
+		chckbxJubilado.setText(traduccion.getString("jubilado"));
+		btnSalaAtras.setText(traduccion.getString("btnAtras"));
+		btnSalaSiguiente.setText(traduccion.getString("btnSiguiente"));
+		btnSalaVolverCartelera.setText(traduccion.getString("btnVolverACartelera"));
+		txtrTipoEntrada.setText(traduccion.getString("notaTipoEntrada"));
+		txtrSalaPedido.setText(traduccion.getString("pedidoVacio"));
+		lblEntradasTotales.setText(traduccion.getString("entradasTotales"));
 	}
 
 	private JPanel getPanelInicial() {
@@ -978,6 +1081,8 @@ public class VentanaPrincipal extends JFrame {
 					int indice = listaHoras.getSelectedIndex();
 					if(indice != -1){
 						gestor.setSalaActual(DateUtil.getFechaSinFormato(((TitledBorder)panelHorarioHoras.getBorder()).getTitle(), traduccion.getLocale()), listaHoras.getSelectedValue());
+						((CardLayout)contentPane.getLayout()).show(contentPane,"sala");
+						prepararPanelSala();
 					}
 				}
 			});
@@ -1006,4 +1111,681 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return panelHorarioJCalendar;
 	}
+	private JPanel getPanelSala() {
+		if (panelSala == null) {
+			panelSala = new JPanel();
+			panelSala.setBackground(DEFAULT_COLOR);
+			panelSala.setLayout(new BorderLayout(0, 0));
+			panelSala.add(getPanelSalaNorte(), BorderLayout.NORTH);
+			panelSala.add(getPanelSalaSur(), BorderLayout.SOUTH);
+			panelSala.add(getPanelSalaEste(), BorderLayout.EAST);
+			panelSala.add(getPanelSalaCentro(), BorderLayout.CENTER);
+		}
+		return panelSala;
+	}
+	private JPanel getPanelSalaNorte() {
+		if (panelSalaNorte == null) {
+			panelSalaNorte = new JPanel();
+			panelSalaNorte.setBackground(DEFAULT_COLOR);
+			panelSalaNorte.setLayout(new GridLayout(2, 0, 0, 0));
+			panelSalaNorte.add(getLblSalaTitutlo());
+			panelSalaNorte.add(getLblSalaSesion());
+		}
+		return panelSalaNorte;
+	}
+	private JPanel getPanelSalaSur() {
+		if (panelSalaSur == null) {
+			panelSalaSur = new JPanel();
+			panelSalaSur.setBackground(DEFAULT_COLOR);
+			panelSalaSur.setLayout(new GridLayout(0, 3, 0, 0));
+			panelSalaSur.add(getPanelSalaSurIzquierda());
+			panelSalaSur.add(getPanelSalaSurCentro());
+			panelSalaSur.add(getPanelSalaSurDerecha());
+		}
+		return panelSalaSur;
+	}
+	private JPanel getPanelSalaSurDerecha() {
+		if (panelSalaSurDerecha == null) {
+			panelSalaSurDerecha = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) panelSalaSurDerecha.getLayout();
+			flowLayout.setAlignment(FlowLayout.RIGHT);
+			panelSalaSurDerecha.setBackground(DEFAULT_COLOR);
+			panelSalaSurDerecha.add(getBtnSalaSiguiente());
+		}
+		return panelSalaSurDerecha;
+	}
+	private JPanel getPanelSalaSurCentro() {
+		if (panelSalaSurCentro == null) {
+			panelSalaSurCentro = new JPanel();
+			panelSalaSurCentro.setBackground(DEFAULT_COLOR);
+			panelSalaSurCentro.add(getBtnSalaVolverCartelera());
+		}
+		return panelSalaSurCentro;
+	}
+	private JPanel getPanelSalaSurIzquierda() {
+		if (panelSalaSurIzquierda == null) {
+			panelSalaSurIzquierda = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) panelSalaSurIzquierda.getLayout();
+			flowLayout.setAlignment(FlowLayout.LEFT);
+			panelSalaSurIzquierda.setBackground(DEFAULT_COLOR);
+			panelSalaSurIzquierda.add(getBtnSalaAtras());
+		}
+		return panelSalaSurIzquierda;
+	}
+	private JPanel getPanelSalaEste() {
+		if (panelSalaEste == null) {
+			panelSalaEste = new JPanel();
+			panelSalaEste.setBackground(DEFAULT_COLOR);
+			panelSalaEste.setLayout(new GridLayout(2, 0, 0, 0));
+			panelSalaEste.add(getPanelSalaEsteLeyenda());
+			panelSalaEste.add(getPanelSalaEsteAbajo());
+		}
+		return panelSalaEste;
+	}
+	private JPanel getPanelSalaEsteLeyenda() {
+		if (panelSalaEsteLeyenda == null) {
+			panelSalaEsteLeyenda = new JPanel();
+			panelSalaEsteLeyenda.setBackground(DEFAULT_COLOR);
+			panelSalaEsteLeyenda.setLayout(new GridLayout(3, 4, 0, 0));
+			panelSalaEsteLeyenda.add(getLblLeyendaLibre());
+			panelSalaEsteLeyenda.add(getLblLeyendaLibreImagen());
+			panelSalaEsteLeyenda.add(getLblLeyendaOcupado());
+			panelSalaEsteLeyenda.add(getLblLeyendaOcupadoImagen());
+			panelSalaEsteLeyenda.add(getLblLeyendaNormal());
+			panelSalaEsteLeyenda.add(getLblLeyendaNormalImagen());
+			panelSalaEsteLeyenda.add(getLblLeyendaJubilado());
+			panelSalaEsteLeyenda.add(getLblLeyendaJubiladoImagen());
+			panelSalaEsteLeyenda.add(getLblLeyendaCumple());
+			panelSalaEsteLeyenda.add(getLblLeyendaCumpleImagen());
+			panelSalaEsteLeyenda.add(getTxtrLeyendaJubiCumple());
+			panelSalaEsteLeyenda.add(getLblLeyendaJubicumpleImagen());
+		}
+		return panelSalaEsteLeyenda;
+	}
+	private JPanel getPanelSalaEsteAbajo() {
+		if (panelSalaEsteAbajo == null) {
+			panelSalaEsteAbajo = new JPanel();
+			panelSalaEsteAbajo.setBackground(DEFAULT_COLOR);
+			panelSalaEsteAbajo.setLayout(new GridLayout(0, 1, 0, 0));
+			panelSalaEsteAbajo.add(getPanelSalaTipoEntrada());
+			panelSalaEsteAbajo.add(getPanelSalaPedido());
+		}
+		return panelSalaEsteAbajo;
+	}
+	private JPanel getPanelSalaTipoEntrada() {
+		if (panelSalaTipoEntrada == null) {
+			panelSalaTipoEntrada = new JPanel();
+			panelSalaTipoEntrada.setBackground(DEFAULT_COLOR);
+			panelSalaTipoEntrada.setLayout(new BorderLayout(0, 0));
+			panelSalaTipoEntrada.add(getPanelSalaTipoEntradaCheck(), BorderLayout.SOUTH);
+			panelSalaTipoEntrada.add(getScrollPaneTipoEntrada(), BorderLayout.CENTER);
+		}
+		return panelSalaTipoEntrada;
+	}
+	private JPanel getPanelSalaPedido() {
+		if (panelSalaPedido == null) {
+			panelSalaPedido = new JPanel();
+			panelSalaPedido.setBackground(DEFAULT_COLOR);
+			panelSalaPedido.setLayout(new BorderLayout(0, 0));
+			panelSalaPedido.add(getPanelSalaPedidoTotal(), BorderLayout.SOUTH);
+			panelSalaPedido.add(getScrollPanelSalaPedido(), BorderLayout.CENTER);
+		}
+		return panelSalaPedido;
+	}
+	private JButton getBtnSalaAtras() {
+		if (btnSalaAtras == null) {
+			btnSalaAtras = new JButton("Sala Atras");
+			btnSalaAtras.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
+		}
+		return btnSalaAtras;
+	}
+	private JButton getBtnSalaVolverCartelera() {
+		if (btnSalaVolverCartelera == null) {
+			btnSalaVolverCartelera = new JButton("Sala Volver Cartelera");
+			btnSalaVolverCartelera.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
+		}
+		return btnSalaVolverCartelera;
+	}
+	private JButton getBtnSalaSiguiente() {
+		if (btnSalaSiguiente == null) {
+			btnSalaSiguiente = new JButton("Sala Siguiente");
+			btnSalaSiguiente.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
+		}
+		return btnSalaSiguiente;
+	}
+	private JLabel getLblSalaTitutlo() {
+		if (lblSalaTitulo == null) {
+			lblSalaTitulo = new JLabel("Sala Titutlo");
+			lblSalaTitulo.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_TITTLE_SIZE));
+		}
+		return lblSalaTitulo;
+	}
+	private JLabel getLblSalaSesion() {
+		if (lblSalaSesion == null) {
+			lblSalaSesion = new JLabel("Sala Sesion");
+			lblSalaSesion.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_TITTLE_SIZE/2));
+		}
+		return lblSalaSesion;
+	}
+	private JLabel getLblLeyendaLibre() {
+		if (lblLeyendaLibre == null) {
+			lblLeyendaLibre = new JLabel("Leyenda Libre");
+		}
+		return lblLeyendaLibre;
+	}
+	private JLabel getLblLeyendaLibreImagen() {
+		if (lblLeyendaLibreImagen == null) {
+			lblLeyendaLibreImagen = new JLabel("");
+		}
+		return lblLeyendaLibreImagen;
+	}
+	private JLabel getLblLeyendaOcupado() {
+		if (lblLeyendaOcupado == null) {
+			lblLeyendaOcupado = new JLabel("Leyenda Ocupado");
+		}
+		return lblLeyendaOcupado;
+	}
+	private JLabel getLblLeyendaOcupadoImagen() {
+		if (lblLeyendaOcupadoImagen == null) {
+			lblLeyendaOcupadoImagen = new JLabel("");
+		}
+		return lblLeyendaOcupadoImagen;
+	}
+	private JLabel getLblLeyendaNormal() {
+		if (lblLeyendaNormal == null) {
+			lblLeyendaNormal = new JLabel("Leyenda Normal");
+		}
+		return lblLeyendaNormal;
+	}
+	private JLabel getLblLeyendaNormalImagen() {
+		if (lblLeyendaNormalImagen == null) {
+			lblLeyendaNormalImagen = new JLabel("");
+		}
+		return lblLeyendaNormalImagen;
+	}
+	private JLabel getLblLeyendaJubilado() {
+		if (lblLeyendaJubilado == null) {
+			lblLeyendaJubilado = new JLabel("Leyenda Jubilado");
+		}
+		return lblLeyendaJubilado;
+	}
+	private JLabel getLblLeyendaJubiladoImagen() {
+		if (lblLeyendaJubiladoImagen == null) {
+			lblLeyendaJubiladoImagen = new JLabel("");
+		}
+		return lblLeyendaJubiladoImagen;
+	}
+	private JLabel getLblLeyendaCumple() {
+		if (lblLeyendaCumple == null) {
+			lblLeyendaCumple = new JLabel("Leyenda Cumple");
+		}
+		return lblLeyendaCumple;
+	}
+	private JLabel getLblLeyendaCumpleImagen() {
+		if (lblLeyendaCumpleImagen == null) {
+			lblLeyendaCumpleImagen = new JLabel("");
+
+		}
+		return lblLeyendaCumpleImagen;
+	}
+	private JLabel getLblLeyendaJubicumpleImagen() {
+		if (lblLeyendaJubicumpleImagen == null) {
+			lblLeyendaJubicumpleImagen = new JLabel("");
+
+		}
+		return lblLeyendaJubicumpleImagen;
+	}
+	private JPanel getPanelSalaTipoEntradaCheck() {
+		if (panelSalaTipoEntradaCheck == null) {
+			panelSalaTipoEntradaCheck = new JPanel();
+			panelSalaTipoEntradaCheck.setBackground(DEFAULT_COLOR);
+			panelSalaTipoEntradaCheck.add(getChckbxJubilado());
+			panelSalaTipoEntradaCheck.add(getChckbxCumple());
+		}
+		return panelSalaTipoEntradaCheck;
+	}
+	private JCheckBox getChckbxJubilado() {
+		if (chckbxJubilado == null) {
+			chckbxJubilado = new JCheckBox("Jubilado");
+		}
+		return chckbxJubilado;
+	}
+	private JCheckBox getChckbxCumple() {
+		if (chckbxCumple == null) {
+			chckbxCumple = new JCheckBox("Cumple");
+		}
+		return chckbxCumple;
+	}
+	private JScrollPane getScrollPaneTipoEntrada() {
+		if (scrollPaneTipoEntrada == null) {
+			scrollPaneTipoEntrada = new JScrollPane();
+			scrollPaneTipoEntrada.setBackground(DEFAULT_COLOR);
+			scrollPaneTipoEntrada.setViewportView(getTxtrTipoEntrada());
+		}
+		return scrollPaneTipoEntrada;
+	}
+	private JTextArea getTxtrTipoEntrada() {
+		if (txtrTipoEntrada == null) {
+			txtrTipoEntrada = new JTextArea();
+			txtrTipoEntrada.setWrapStyleWord(true);
+			txtrTipoEntrada.setLineWrap(true);
+			txtrTipoEntrada.setEditable(false);
+			txtrTipoEntrada.setText("Tipo Entrada");
+		}
+		return txtrTipoEntrada;
+	}
+	private JPanel getPanelSalaPedidoTotal() {
+		if (panelSalaPedidoTotal == null) {
+			panelSalaPedidoTotal = new JPanel();
+			panelSalaPedidoTotal.setBackground(DEFAULT_COLOR);
+			panelSalaPedidoTotal.add(getLblEntradasTotales());
+			panelSalaPedidoTotal.add(getTxtEntradasTotales());
+		}
+		return panelSalaPedidoTotal;
+	}
+	private JScrollPane getScrollPanelSalaPedido() {
+		if (scrollPanelSalaPedido == null) {
+			scrollPanelSalaPedido = new JScrollPane();
+			scrollPanelSalaPedido.setBackground(DEFAULT_COLOR);
+			scrollPanelSalaPedido.setViewportView(getTxtrSalaPedido());
+		}
+		return scrollPanelSalaPedido;
+	}
+	private JTextArea getTxtrSalaPedido() {
+		if (txtrSalaPedido == null) {
+			txtrSalaPedido = new JTextArea();
+			txtrSalaPedido.setLineWrap(true);
+			txtrSalaPedido.setEditable(false);
+			txtrSalaPedido.setWrapStyleWord(true);
+			txtrSalaPedido.setText("Sala Pedido");
+		}
+		return txtrSalaPedido;
+	}
+	private JLabel getLblEntradasTotales() {
+		if (lblEntradasTotales == null) {
+			lblEntradasTotales = new JLabel("Entradas Totales");
+		}
+		return lblEntradasTotales;
+	}
+	private JTextField getTxtEntradasTotales() {
+		if (txtEntradasTotales == null) {
+			txtEntradasTotales = new JTextField();
+			txtEntradasTotales.setEditable(false);
+			txtEntradasTotales.setText("Entradas totales");
+			txtEntradasTotales.setColumns(10);
+		}
+		return txtEntradasTotales;
+	}
+	private void prepararPanelSala(){
+		lblSalaTitulo.setText(gestor.getPeliculaActual().getTitulo());
+		lblSalaSesion.setText(gestor.getSalaActual().getFecha()+" - "+gestor.getSalaActual().getHora());
+		ImageUtil.adaptarImagen(lblLeyendaLibreImagen, "/modulo/img/silla.png");
+		ImageUtil.adaptarImagen(lblLeyendaOcupadoImagen, "/modulo/img/sillaO.png");
+		ImageUtil.adaptarImagen(lblLeyendaNormalImagen, "/modulo/img/sillaEN.png");
+		ImageUtil.adaptarImagen(lblLeyendaJubiladoImagen, "/modulo/img/sillaEJ.png");
+		ImageUtil.adaptarImagen(lblLeyendaCumpleImagen, "/modulo/img/sillaEC.png");
+		ImageUtil.adaptarImagen(lblLeyendaJubicumpleImagen, "/modulo/img/sillaEJC.png");
+		colocarButacas();
+	}
+	private JTextArea getTxtrLeyendaJubiCumple() {
+		if (txtrLeyendaJubiCumple == null) {
+			txtrLeyendaJubiCumple = new JTextArea();
+			txtrLeyendaJubiCumple.setEditable(false);
+			txtrLeyendaJubiCumple.setOpaque(false);
+			txtrLeyendaJubiCumple.setLineWrap(true);
+			txtrLeyendaJubiCumple.setWrapStyleWord(true);
+			txtrLeyendaJubiCumple.setText("");
+		}
+		return txtrLeyendaJubiCumple;
+	}
+	private JPanel getPanelSalaCentro() {
+		if (panelSalaCentro == null) {
+			panelSalaCentro = new JPanel();
+			panelSalaCentro.setBackground(DEFAULT_COLOR);
+			panelSalaCentro.setLayout(new GridLayout(4, 11, 0, 0));
+			panelSalaCentro.add(getBtnButaca());
+			panelSalaCentro.add(getBtnButaca_1());
+			panelSalaCentro.add(getBtnButaca_2());
+			panelSalaCentro.add(getBtnButaca_3());
+			panelSalaCentro.add(getBtnButaca_4());
+			panelSalaCentro.add(getHorizontalGluePasillo3());
+			panelSalaCentro.add(getBtnButaca_5());
+			panelSalaCentro.add(getBtnButaca_6());
+			panelSalaCentro.add(getBtnButaca_7());
+			panelSalaCentro.add(getBtnButaca_8());
+			panelSalaCentro.add(getBtnButaca_9());
+			panelSalaCentro.add(getHorizontalGlueHueco2I());
+			panelSalaCentro.add(getBtnButaca_10());
+			panelSalaCentro.add(getBtnButaca_11());
+			panelSalaCentro.add(getBtnButuca());
+			panelSalaCentro.add(getBtnButaca_12());
+			panelSalaCentro.add(getHorizontalGluePasillo2());
+			panelSalaCentro.add(getBtnButaca_13());
+			panelSalaCentro.add(getBtnButaca_14());
+			panelSalaCentro.add(getBtnButaca_15());
+			panelSalaCentro.add(getBtnButaca_16());
+			panelSalaCentro.add(getHorizontalGlueHueco2D());
+			panelSalaCentro.add(getHorizontalGlueHueco1I());
+			panelSalaCentro.add(getBtnButaca_18());
+			panelSalaCentro.add(getBtnButaca_19());
+			panelSalaCentro.add(getBtnButaca_20());
+			panelSalaCentro.add(getBtnButaca_21());
+			panelSalaCentro.add(getHorizontalGluePasillo1());
+			panelSalaCentro.add(getBtnButaca_22());
+			panelSalaCentro.add(getBtnButaca_23());
+			panelSalaCentro.add(getBtnButaca_24());
+			panelSalaCentro.add(getBtnButaca_25());
+			panelSalaCentro.add(getHorizontalGlueHueco1D());
+			panelSalaCentro.add(getHorizontalGlueHueco0I2());
+			panelSalaCentro.add(getHorizontalGlueHueco0I1());
+			panelSalaCentro.add(getHorizontalGlueHueco0I0());
+			panelSalaCentro.add(getBtnButaca_17());
+			panelSalaCentro.add(getBtnButaca_26());
+			panelSalaCentro.add(getHorizontalGluePasillo0());
+			panelSalaCentro.add(getBtnButaca_27());
+			panelSalaCentro.add(getBtnButaca_28());
+			panelSalaCentro.add(getHorizontalGlueHueco0D0());
+			panelSalaCentro.add(getHorizontalGlueHueco0D1());
+			panelSalaCentro.add(getHorizontalGlueHueco0D2());
+		}
+		return panelSalaCentro;
+	}
+	private JButton getBtnButaca() {
+		if (btnButaca == null) {
+			btnButaca = new JButton("butaca,3,0");
+		}
+		return btnButaca;
+	}
+	private JButton getBtnButaca_1() {
+		if (btnButaca_1 == null) {
+			btnButaca_1 = new JButton("butaca,3,1");
+		}
+		return btnButaca_1;
+	}
+	private JButton getBtnButaca_2() {
+		if (btnButaca_2 == null) {
+			btnButaca_2 = new JButton("butaca,3,2");
+		}
+		return btnButaca_2;
+	}
+	private JButton getBtnButaca_3() {
+		if (btnButaca_3 == null) {
+			btnButaca_3 = new JButton("butaca,3,3");
+		}
+		return btnButaca_3;
+	}
+	private JButton getBtnButaca_4() {
+		if (btnButaca_4 == null) {
+			btnButaca_4 = new JButton("butaca,3,4");
+		}
+		return btnButaca_4;
+	}
+	private Component getHorizontalGluePasillo3() {
+		if (horizontalGluePasillo3 == null) {
+			horizontalGluePasillo3 = Box.createHorizontalGlue();
+		}
+		return horizontalGluePasillo3;
+	}
+	private JButton getBtnButaca_5() {
+		if (btnButaca_5 == null) {
+			btnButaca_5 = new JButton("butaca,3,5");
+		}
+		return btnButaca_5;
+	}
+	private JButton getBtnButaca_6() {
+		if (btnButaca_6 == null) {
+			btnButaca_6 = new JButton("butaca,3,6");
+		}
+		return btnButaca_6;
+	}
+	private JButton getBtnButaca_7() {
+		if (btnButaca_7 == null) {
+			btnButaca_7 = new JButton("butaca,3,7");
+		}
+		return btnButaca_7;
+	}
+	private JButton getBtnButaca_8() {
+		if (btnButaca_8 == null) {
+			btnButaca_8 = new JButton("butaca,3,8");
+		}
+		return btnButaca_8;
+	}
+	private JButton getBtnButaca_9() {
+		if (btnButaca_9 == null) {
+			btnButaca_9 = new JButton("butaca,3,9");
+		}
+		return btnButaca_9;
+	}
+	private Component getHorizontalGlueHueco2I() {
+		if (horizontalGlueHueco2I == null) {
+			horizontalGlueHueco2I = Box.createHorizontalGlue();
+		}
+		return horizontalGlueHueco2I;
+	}
+	private JButton getBtnButaca_10() {
+		if (btnButaca_10 == null) {
+			btnButaca_10 = new JButton("butaca,2,1");
+		}
+		return btnButaca_10;
+	}
+	private JButton getBtnButaca_11() {
+		if (btnButaca_11 == null) {
+			btnButaca_11 = new JButton("butaca,2,2");
+		}
+		return btnButaca_11;
+	}
+	private JButton getBtnButuca() {
+		if (btnButuca == null) {
+			btnButuca = new JButton("butuca,2,3");
+		}
+		return btnButuca;
+	}
+	private JButton getBtnButaca_12() {
+		if (btnButaca_12 == null) {
+			btnButaca_12 = new JButton("butaca,2,4");
+		}
+		return btnButaca_12;
+	}
+	private Component getHorizontalGluePasillo2() {
+		if (horizontalGluePasillo2 == null) {
+			horizontalGluePasillo2 = Box.createHorizontalGlue();
+		}
+		return horizontalGluePasillo2;
+	}
+	private JButton getBtnButaca_13() {
+		if (btnButaca_13 == null) {
+			btnButaca_13 = new JButton("butaca,2,5");
+		}
+		return btnButaca_13;
+	}
+	private JButton getBtnButaca_14() {
+		if (btnButaca_14 == null) {
+			btnButaca_14 = new JButton("butaca,2,6");
+		}
+		return btnButaca_14;
+	}
+	private JButton getBtnButaca_15() {
+		if (btnButaca_15 == null) {
+			btnButaca_15 = new JButton("butaca,2,7");
+		}
+		return btnButaca_15;
+	}
+	private JButton getBtnButaca_16() {
+		if (btnButaca_16 == null) {
+			btnButaca_16 = new JButton("butaca,2,8");
+		}
+		return btnButaca_16;
+	}
+	private Component getHorizontalGlueHueco2D() {
+		if (horizontalGlueHueco2D == null) {
+			horizontalGlueHueco2D = Box.createHorizontalGlue();
+		}
+		return horizontalGlueHueco2D;
+	}
+	private Component getHorizontalGlueHueco1I() {
+		if (horizontalGlueHueco1I == null) {
+			horizontalGlueHueco1I = Box.createHorizontalGlue();
+		}
+		return horizontalGlueHueco1I;
+	}
+	private JButton getBtnButaca_18() {
+		if (btnButaca_18 == null) {
+			btnButaca_18 = new JButton("butaca,1,1");
+		}
+		return btnButaca_18;
+	}
+	private JButton getBtnButaca_19() {
+		if (btnButaca_19 == null) {
+			btnButaca_19 = new JButton("butaca,1,2");
+		}
+		return btnButaca_19;
+	}
+	private JButton getBtnButaca_20() {
+		if (btnButaca_20 == null) {
+			btnButaca_20 = new JButton("butaca,1,3");
+		}
+		return btnButaca_20;
+	}
+	private JButton getBtnButaca_21() {
+		if (btnButaca_21 == null) {
+			btnButaca_21 = new JButton("butaca,1,4");
+		}
+		return btnButaca_21;
+	}
+	private Component getHorizontalGluePasillo1() {
+		if (horizontalGluePasillo1 == null) {
+			horizontalGluePasillo1 = Box.createHorizontalGlue();
+		}
+		return horizontalGluePasillo1;
+	}
+	private JButton getBtnButaca_22() {
+		if (btnButaca_22 == null) {
+			btnButaca_22 = new JButton("butaca,1,5");
+		}
+		return btnButaca_22;
+	}
+	private JButton getBtnButaca_23() {
+		if (btnButaca_23 == null) {
+			btnButaca_23 = new JButton("butaca,1,6");
+		}
+		return btnButaca_23;
+	}
+	private JButton getBtnButaca_24() {
+		if (btnButaca_24 == null) {
+			btnButaca_24 = new JButton("butaca,1,7");
+		}
+		return btnButaca_24;
+	}
+	private JButton getBtnButaca_25() {
+		if (btnButaca_25 == null) {
+			btnButaca_25 = new JButton("butaca,1,8");
+		}
+		return btnButaca_25;
+	}
+	private Component getHorizontalGlueHueco1D() {
+		if (horizontalGlueHueco1D == null) {
+			horizontalGlueHueco1D = Box.createHorizontalGlue();
+		}
+		return horizontalGlueHueco1D;
+	}
+	private Component getHorizontalGlueHueco0I2() {
+		if (horizontalGlueHueco0I2 == null) {
+			horizontalGlueHueco0I2 = Box.createHorizontalGlue();
+		}
+		return horizontalGlueHueco0I2;
+	}
+	private Component getHorizontalGlueHueco0I1() {
+		if (horizontalGlueHueco0I1 == null) {
+			horizontalGlueHueco0I1 = Box.createHorizontalGlue();
+		}
+		return horizontalGlueHueco0I1;
+	}
+	private Component getHorizontalGlueHueco0I0() {
+		if (horizontalGlueHueco0I0 == null) {
+			horizontalGlueHueco0I0 = Box.createHorizontalGlue();
+		}
+		return horizontalGlueHueco0I0;
+	}
+	private JButton getBtnButaca_17() {
+		if (btnButaca_17 == null) {
+			btnButaca_17 = new JButton("butaca,0,3");
+		}
+		return btnButaca_17;
+	}
+	private JButton getBtnButaca_26() {
+		if (btnButaca_26 == null) {
+			btnButaca_26 = new JButton("butaca,0,4");
+		}
+		return btnButaca_26;
+	}
+	private Component getHorizontalGluePasillo0() {
+		if (horizontalGluePasillo0 == null) {
+			horizontalGluePasillo0 = Box.createHorizontalGlue();
+		}
+		return horizontalGluePasillo0;
+	}
+	private JButton getBtnButaca_27() {
+		if (btnButaca_27 == null) {
+			btnButaca_27 = new JButton("butaca,0,5");
+		}
+		return btnButaca_27;
+	}
+	private JButton getBtnButaca_28() {
+		if (btnButaca_28 == null) {
+			btnButaca_28 = new JButton("butaca,0,6");
+		}
+		return btnButaca_28;
+	}
+	private Component getHorizontalGlueHueco0D0() {
+		if (horizontalGlueHueco0D0 == null) {
+			horizontalGlueHueco0D0 = Box.createHorizontalGlue();
+		}
+		return horizontalGlueHueco0D0;
+	}
+	private Component getHorizontalGlueHueco0D1() {
+		if (horizontalGlueHueco0D1 == null) {
+			horizontalGlueHueco0D1 = Box.createHorizontalGlue();
+		}
+		return horizontalGlueHueco0D1;
+	}
+	private Component getHorizontalGlueHueco0D2() {
+		if (horizontalGlueHueco0D2 == null) {
+			horizontalGlueHueco0D2 = Box.createHorizontalGlue();
+		}
+		return horizontalGlueHueco0D2;
+	}
+	private void colocarButacas(){
+		for(int i = 0; i < panelSalaCentro.getComponentCount(); i++){
+			if(panelSalaCentro.getComponents()[i] instanceof JButton){
+				JButton boton = (JButton)panelSalaCentro.getComponents()[i];
+				if(!boton.getText().isEmpty()){
+					boton.setActionCommand(boton.getText().split(",")[1]+","+boton.getText().split(",")[2]);
+					boton.setText("");
+				}
+				boton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						System.out.println(e.getActionCommand());
+					}
+				});
+			}
+		}
+	}
+	private int getTipoEntrada(){
+		if(chckbxCumple.isSelected() && !chckbxJubilado.isSelected()){
+			chckbxCumple.setSelected(false);
+			return Entrada.PACK_CUMPLE;
+		}
+		else if(!this.chckbxCumple.isSelected() && chckbxJubilado.isSelected()){
+			chckbxJubilado.setSelected(false);
+			return Entrada.JUBILADO;
+		}
+		else if(chckbxCumple.isSelected() && chckbxJubilado.isSelected()){
+			chckbxCumple.setSelected(false);
+			chckbxJubilado.setSelected(false);
+			return Entrada.JUBILADO_Y_PACK_CUMPLE;
+		}
+		else{
+			return Entrada.NORMAL;
+		}
+		}
 }
