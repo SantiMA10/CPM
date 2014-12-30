@@ -231,7 +231,18 @@ public class VentanaPrincipal extends JFrame {
 	private Component horizontalGlueHueco0D0;
 	private Component horizontalGlueHueco0D1;
 	private Component horizontalGlueHueco0D2;
-
+	private JPanel panelPedido;
+	private JLabel lblPedidoTitulo;
+	private JPanel panelPedidoSur;
+	private JPanel panelPedidoSurIzquierda;
+	private JPanel panelPedidoSurCentro;
+	private JPanel panelPedidoSurDerecha;
+	private JButton btnPedidoAtras;
+	private JButton btnPedidoComprarMas;
+	private JButton btnPedidoFinalizar;
+	private JScrollPane scrollPanePedidoCentro;
+	private JTable tablaPedido;
+	private MiModeloTabla modeloPedido;
 
 	/**
 	 * Launch the application.
@@ -267,6 +278,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPanelPelicula(), "pelicula");
 		contentPane.add(getPanelHorario(), "horario");
 		contentPane.add(getPanelSala(), "sala");
+		contentPane.add(getPanelPedido(), "pedido");
 	}
 	
 	private void localizar(Locale localizacion){
@@ -319,6 +331,12 @@ public class VentanaPrincipal extends JFrame {
 		txtrTipoEntrada.setText(traduccion.getString("notaTipoEntrada"));
 		txtrSalaPedido.setText(traduccion.getString("pedidoVacio"));
 		lblEntradasTotales.setText(traduccion.getString("entradasTotales"));
+		//Pedido
+		lblPedidoTitulo.setText(traduccion.getString("pedido"));
+		btnPedidoAtras.setText(traduccion.getString("btnAtras"));
+		btnPedidoFinalizar.setText(traduccion.getString("btnFinalizar"));
+		btnPedidoComprarMas.setText(traduccion.getString("btnComprarMas"));
+		modeloPedido.setColumnIdentifiers(new String[]{traduccion.getString("numEntradas"),traduccion.getString("sesion"),traduccion.getString("pelicula"),traduccion.getString("precio")});
 	}
 
 	private JPanel getPanelInicial() {
@@ -1268,7 +1286,8 @@ public class VentanaPrincipal extends JFrame {
 			btnSalaSiguiente = new JButton("Sala Siguiente");
 			btnSalaSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					gestor.guardarSalas();
+					prepararModeloPedido();
+					((CardLayout)contentPane.getLayout()).show(contentPane,"pedido");
 				}
 			});
 			btnSalaSiguiente.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
@@ -1900,5 +1919,140 @@ public class VentanaPrincipal extends JFrame {
 		else{
 			return Entrada.NORMAL;
 		}
+	}
+	private JPanel getPanelPedido() {
+		if (panelPedido == null) {
+			panelPedido = new JPanel();
+			panelPedido.setBackground(DEFAULT_COLOR);
+			panelPedido.setLayout(new BorderLayout(0, 0));
+			panelPedido.add(getLblPedidoTitulo(), BorderLayout.NORTH);
+			panelPedido.add(getPanelPedidoSur(), BorderLayout.SOUTH);
+			panelPedido.add(getScrollPanePedidoCentro(), BorderLayout.CENTER);
+		}
+		return panelPedido;
+	}
+	private JLabel getLblPedidoTitulo() {
+		if (lblPedidoTitulo == null) {
+			lblPedidoTitulo = new JLabel("Pedido Titulo");
+			lblPedidoTitulo.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_TITTLE_SIZE));
+		}
+		return lblPedidoTitulo;
+	}
+	private JPanel getPanelPedidoSur() {
+		if (panelPedidoSur == null) {
+			panelPedidoSur = new JPanel();
+			panelPedidoSur.setBackground(DEFAULT_COLOR);
+			panelPedidoSur.setLayout(new GridLayout(0, 3, 0, 0));
+			panelPedidoSur.add(getPanelPedidoSurIzquierda());
+			panelPedidoSur.add(getPanelPedidoSurCentro());
+			panelPedidoSur.add(getPanelPedidoSurDerecha());
+		}
+		return panelPedidoSur;
+	}
+	private JPanel getPanelPedidoSurIzquierda() {
+		if (panelPedidoSurIzquierda == null) {
+			panelPedidoSurIzquierda = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) panelPedidoSurIzquierda.getLayout();
+			flowLayout.setAlignment(FlowLayout.LEFT);
+			panelPedidoSurIzquierda.setBackground(DEFAULT_COLOR);
+			panelPedidoSurIzquierda.add(getBtnPedidoAtras());
+		}
+		return panelPedidoSurIzquierda;
+	}
+	private JPanel getPanelPedidoSurCentro() {
+		if (panelPedidoSurCentro == null) {
+			panelPedidoSurCentro = new JPanel();
+			panelPedidoSurCentro.setBackground(DEFAULT_COLOR);
+			panelPedidoSurCentro.add(getBtnPedidoComprarMas());
+		}
+		return panelPedidoSurCentro;
+	}
+	private JPanel getPanelPedidoSurDerecha() {
+		if (panelPedidoSurDerecha == null) {
+			panelPedidoSurDerecha = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) panelPedidoSurDerecha.getLayout();
+			flowLayout.setAlignment(FlowLayout.RIGHT);
+			panelPedidoSurDerecha.setBackground(DEFAULT_COLOR);
+			panelPedidoSurDerecha.add(getBtnPedidoFinalizar());
+		}
+		return panelPedidoSurDerecha;
+	}
+	private JButton getBtnPedidoAtras() {
+		if (btnPedidoAtras == null) {
+			btnPedidoAtras = new JButton("Pedido Atras");
+			btnPedidoAtras.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					((CardLayout)contentPane.getLayout()).show(contentPane,"sala");
+				}
+			});
+		}
+		return btnPedidoAtras;
+	}
+	private JButton getBtnPedidoComprarMas() {
+		if (btnPedidoComprarMas == null) {
+			btnPedidoComprarMas = new JButton("Pedido Comprar Mas");
+			btnPedidoComprarMas.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					volverACartelera();
+				}
+			});
+		}
+		return btnPedidoComprarMas;
+	}
+	private JButton getBtnPedidoFinalizar() {
+		if (btnPedidoFinalizar == null) {
+			btnPedidoFinalizar = new JButton("Pedido Finalizar");
+			btnPedidoFinalizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					gestor.guardarSalas();
+					((CardLayout)contentPane.getLayout()).show(contentPane,"inicio");
+				}
+			});
+		}
+		return btnPedidoFinalizar;
+	}
+	private JScrollPane getScrollPanePedidoCentro() {
+		if (scrollPanePedidoCentro == null) {
+			scrollPanePedidoCentro = new JScrollPane();
+			scrollPanePedidoCentro.setBackground(DEFAULT_COLOR);
+			scrollPanePedidoCentro.setViewportView(getTablaPedido());
+		}
+		return scrollPanePedidoCentro;
+	}
+	private JTable getTablaPedido() {
+		if (tablaPedido == null) {
+			String[] nombreColumnas = {"N Entradas","Sesion","Pelicula","Precio entradas"};
+			modeloPedido = new MiModeloTabla(nombreColumnas, 0);
+			tablaPedido = new JTable(modeloPedido);
+			ComponentsUtil.changeJTableHeaderSize(tablaPedido);
+		}
+		return tablaPedido;
+	}
+	private void prepararModeloPedido(){
+		Object[] nuevaFila = new Object[4];
+		if(isEnModeloPedido() == -1){
+			nuevaFila[0] = String.valueOf(gestor.getEntradasPeliculaActual());
+			nuevaFila[1] = gestor.getSalaActual().getFecha()+" - "+gestor.getSalaActual().getHora();
+			nuevaFila[2] = gestor.getPeliculaActual().toString();
+			nuevaFila[3] = gestor.getPrecioEntradasPeliculaActual();
+			modeloPedido.addRow(nuevaFila);
+		}
+		else{
+			modeloPedido.removeRow(isEnModeloPedido());
+			nuevaFila[0] = String.valueOf(gestor.getEntradasPeliculaActual());
+			nuevaFila[1] = gestor.getSalaActual().getFecha()+" - "+gestor.getSalaActual().getHora();
+			nuevaFila[2] = gestor.getPeliculaActual().toString();
+			nuevaFila[3] = gestor.getPrecioEntradasPeliculaActual();
+			modeloPedido.addRow(nuevaFila);
+		}
+	}
+	private int isEnModeloPedido(){
+		for(int i = 0; i < modeloPedido.getRowCount(); i++){
+			if(modeloPedido.getValueAt(i, 1).equals(gestor.getSalaActual().getFecha()+" - "+gestor.getSalaActual().getHora()) &&
+					modeloPedido.getValueAt(i, 2).equals(gestor.getPeliculaActual().toString())){
+				return i;
+			}
+		}
+		return -1;
 	}
 }

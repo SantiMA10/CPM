@@ -36,8 +36,8 @@ public class Cartelera {
 	    		linea = fichero.readLine();
 	    		if(!linea.isEmpty()){
 		    		String[] pelicula = linea.split(";");
-		    		peliculas.add(new Pelicula(pelicula[0], pelicula[1], pelicula[2], pelicula[3], Integer.parseInt(pelicula[4]), 
-		    				pelicula[5], pelicula[6], pelicula[7], pelicula[8], pelicula[9]));
+		    		peliculas.add(new Pelicula(pelicula[0].trim(), pelicula[1].trim(), pelicula[2].trim(), pelicula[3].trim(), Integer.parseInt(pelicula[4]), 
+		    				pelicula[5].trim(), pelicula[6].trim(), pelicula[7].trim(), pelicula[8].trim(), pelicula[9].trim()));
 	    		}
 	    	}
 	    	fichero.close();

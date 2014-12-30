@@ -15,6 +15,7 @@ public class Entrada {
 	private int fila;
 	private int butaca;
 	private int tipo;
+	private double precio;
 	
 	public Entrada(String codigo, String tituloPelicula, String fecha,
 			String hora, int fila, int butaca, int tipo) {
@@ -85,5 +86,9 @@ public class Entrada {
 
 	public void setTipo(int tipo) {
 		this.tipo = tipo;
+	}
+
+	public double getPrecio() {
+		return precio+1;
 	}
 }

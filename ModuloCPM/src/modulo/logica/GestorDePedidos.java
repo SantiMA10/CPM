@@ -165,4 +165,14 @@ public class GestorDePedidos {
 		}
 		return printPedido;
 	}
+
+	public double getPrecioEntradasPeliculaActual() {
+		double precioEntradas = 0;
+		for(int i = 0; i < pedido.size(); i++){
+			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo())){
+				precioEntradas += pedido.get(i).getPrecio();
+			}
+		}
+		return precioEntradas;
+	}
 }
