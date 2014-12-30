@@ -673,6 +673,12 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnCarteleraIrPedido() {
 		if (btnCarteleraIrPedido == null) {
 			btnCarteleraIrPedido = new JButton("Cartelera Ir Pedido");
+			btnCarteleraIrPedido.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					btnPedidoAtras.setEnabled(false);
+					((CardLayout)contentPane.getLayout()).show(contentPane,"pedido");
+				}
+			});
 		}
 		return btnCarteleraIrPedido;
 	}
@@ -687,6 +693,12 @@ public class VentanaPrincipal extends JFrame {
 		tablaCartelera.clearSelection();
 		btnCarteleraSiguiente.setEnabled(false);
 		((CardLayout)contentPane.getLayout()).show(contentPane,"cartelera");
+		if(gestor.isPedidoVacio()){
+			panelCarteleraPedido.setVisible(false);
+		}
+		else{
+			panelCarteleraPedido.setVisible(true);
+		}
 	}
 	private JPanel getPanelPelicula() {
 		if (panelPelicula == null) {
@@ -1006,6 +1018,8 @@ public class VentanaPrincipal extends JFrame {
 					}
 					else if(e.getClickCount() == 2){
 						gestor.setSalaActual(DateUtil.getFechaSinFormato(((TitledBorder)panelHorarioHoras.getBorder()).getTitle(), traduccion.getLocale()), listaHoras.getSelectedValue());
+						prepararPanelSala();
+						((CardLayout)contentPane.getLayout()).show(contentPane,"sala");
 					}
 				}
 			});
@@ -1287,6 +1301,8 @@ public class VentanaPrincipal extends JFrame {
 			btnSalaSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					prepararModeloPedido();
+					if(gestor.getEntradasPeliculaActual() > 0 && !modeloListaPedido.contains(gestor.getPeliculaActual()))
+						modeloListaPedido.addElement(gestor.getPeliculaActual());
 					((CardLayout)contentPane.getLayout()).show(contentPane,"pedido");
 				}
 			});
@@ -1856,7 +1872,7 @@ public class VentanaPrincipal extends JFrame {
 							if(gestor.comprarEntrada(fila, butaca, tipo)){
 								cambiarImagenButaca((JButton)e.getSource(), tipo);
 							}
-							else{
+							else if(gestor.getSalaActual().isLibre(fila, butaca)){
 								gestor.quitarEntrada(fila, butaca);
 								cambiarImagenButaca((JButton)e.getSource(), Entrada.LIBRE);
 							}
@@ -1872,13 +1888,8 @@ public class VentanaPrincipal extends JFrame {
 	private void obtenerEstadoSala(JButton boton) {
 		int fila = Integer.parseInt(boton.getActionCommand().split(",")[0]);
 		int butaca = Integer.parseInt(boton.getActionCommand().split(",")[1]);
-		if(!gestor.getSalaActual().isLibre(fila, butaca)){
-			cambiarImagenButaca(boton, Entrada.OCUPADA);
-		}
-		else{
-			cambiarImagenButaca(boton, Entrada.LIBRE);
-		}
-		
+		int estado = gestor.isLibre(fila, butaca);
+		cambiarImagenButaca(boton, estado);
 	}
 
 	protected void cambiarImagenButaca(JButton boton, int tipo) {
@@ -2025,6 +2036,8 @@ public class VentanaPrincipal extends JFrame {
 			modeloPedido = new MiModeloTabla(nombreColumnas, 0);
 			tablaPedido = new JTable(modeloPedido);
 			ComponentsUtil.changeJTableHeaderSize(tablaPedido);
+			tablaPedido.getTableHeader().setReorderingAllowed(false);
+			tablaPedido.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		}
 		return tablaPedido;
 	}

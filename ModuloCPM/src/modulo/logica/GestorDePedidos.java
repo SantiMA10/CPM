@@ -64,21 +64,21 @@ public class GestorDePedidos {
 
 	public boolean comprarEntrada(int fila, int butaca, int tipo){
 		Sala sala = peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
-		Entrada entrada = sala.cambiarTipoDeEntrada(fila, butaca, tipo);
-		if(entrada != null){
-			pedido.add(entrada);
-			return true;
+		if(sala.isLibre(fila, butaca)){
+			Entrada entrada = sala.cambiarTipoDeEntrada(fila, butaca, tipo);
+			System.out.println(entrada);
+			if(entrada != null){
+				pedido.add(entrada);
+				return true;
+			}
 		}
 		return false;
 	}
 	
 	public void quitarEntrada(int fila, int butaca){
 		for(int i = 0; i < pedido.size(); i++){
-			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo()) && pedido.get(i).getFecha().equals(salaActual.getFecha()) &&
-					pedido.get(i).getHora().equals(salaActual.getHora())){
+			if(isEnPedido(fila, butaca) != Entrada.OCUPADA){
 				Sala sala = peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
-				System.out.println("quitando entrada"+fila+butaca);
-				System.out.println(pedido.get(i));
 				pedido.remove(i);
 				sala.cambiarTipoDeEntrada(fila, butaca, 0);
 				break;
@@ -132,7 +132,8 @@ public class GestorDePedidos {
 	public String printPedidoPeliculaActual(ResourceBundle traduccion) {
 		int numNormales = 0, numJubilado = 0, numCumple = 0, numJubiCumple = 0;
 		for(int i = 0; i < pedido.size(); i++){
-			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo())){
+			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo()) && pedido.get(i).getFecha().equals(salaActual.getFecha()) &&
+					pedido.get(i).getHora().equals(salaActual.getHora())){
 				if(pedido.get(i).getTipo() == Entrada.NORMAL){
 					numNormales++;
 				}
@@ -174,5 +175,24 @@ public class GestorDePedidos {
 			}
 		}
 		return precioEntradas;
+	}
+
+	public int isLibre(int fila, int butaca) {
+		int tipo = isEnPedido(fila, butaca);
+		if(!getSalaActual().isLibre(fila, butaca)){
+			return tipo;
+		}
+		
+		return Entrada.LIBRE;
+	}
+
+	private int isEnPedido(int fila, int butaca) {
+		for(int i = 0; i < pedido.size(); i++){
+			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo()) && pedido.get(i).getFecha().equals(salaActual.getFecha()) &&
+					pedido.get(i).getHora().equals(salaActual.getHora()) && pedido.get(i).getButaca() == butaca && pedido.get(i).getFila() == fila){
+				return pedido.get(i).getTipo();
+			}
+		}
+		return Entrada.OCUPADA;
 	}
 }

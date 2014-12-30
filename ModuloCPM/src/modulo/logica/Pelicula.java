@@ -74,8 +74,7 @@ public class Pelicula {
 	}
 
 	private void procesarFormato(String is3D) {
-		this.is3D = (is3D.equals("S") || is3D.equals("s"));
-		
+		this.is3D = (is3D.equals("S") || is3D.equals("s"));	
 	}
 
 	public String getCodigo() {
