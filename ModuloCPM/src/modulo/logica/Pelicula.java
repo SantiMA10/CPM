@@ -1,16 +1,8 @@
 package modulo.logica;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 
 public class Pelicula {
@@ -39,27 +31,11 @@ public class Pelicula {
 		procesarHoras(horas);
 		setNombreSala(nombreSala);
 		procesarFormato(is3D);
-		if(!cargarSalas()){
-			crearSalas();
-		}		
+		crearSalas();
 	}
 	
 	public String getRutaImagen(){
 		return "/modulo/img/"+getCodigo()+".jpg";
-	}
-	
-	public void guardarSalas() {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		try{
-			System.out.println("Guardando salas: "+getTitulo());
-			BufferedWriter fichero = new BufferedWriter(new FileWriter("data/salas/"+getCodigo()+".json"));
-			gson.toJson(salas, fichero);
-	    	fichero.close();
-	    	System.out.println("Salas de "+getTitulo()+" guardadas");
-		}catch(Exception e){
-			
-		}
-		
 	}
 
 	private void crearSalas() {
@@ -71,6 +47,14 @@ public class Pelicula {
 		}
 		
 	}
+	
+	public void guardarSalas(){
+		for(int i = 0; i < salas.size(); i++){
+			if(!salas.get(i).isVacia()){
+				salas.get(i).guardarSala();
+			}
+		}
+	}
 
 	public Sala getSala(String fecha, String hora){
 		for(int i = 0; i < salas.size(); i++){
@@ -79,26 +63,6 @@ public class Pelicula {
 			}
 		}
 		return null;
-	}
-	
-	private boolean cargarSalas(){
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		try{
-			BufferedReader fichero = new BufferedReader(new FileReader("data/salas/"+getCodigo()+".json"));
-			System.out.println("Cargando salas de "+getTitulo());
-			java.lang.reflect.Type tipoPeliculas = new TypeToken<ArrayList<Integer>>(){}.getType();
-			salas = gson.fromJson(fichero, tipoPeliculas);
-	    	fichero.close();
-	    	if(!salas.get(0).getTituloPelicula().equals(getTitulo())){
-	    		return false;
-	    	}
-	    	System.out.println("Salas de "+ getTitulo() + " cargadas");
-		}catch(FileNotFoundException fn){
-			return false;
-		}catch(Exception e){
-			return false;
-		}
-		return true;
 	}
 	
 	private void procesarHoras(String horas) {

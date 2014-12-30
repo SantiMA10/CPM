@@ -1249,6 +1249,11 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnSalaSiguiente() {
 		if (btnSalaSiguiente == null) {
 			btnSalaSiguiente = new JButton("Sala Siguiente");
+			btnSalaSiguiente.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					gestor.guardarSalas();
+				}
+			});
 			btnSalaSiguiente.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 		}
 		return btnSalaSiguiente;
@@ -1426,6 +1431,7 @@ public class VentanaPrincipal extends JFrame {
 		ImageUtil.adaptarImagen(lblLeyendaCumpleImagen, "/modulo/img/sillaEC.png");
 		ImageUtil.adaptarImagen(lblLeyendaJubicumpleImagen, "/modulo/img/sillaEJC.png");
 		colocarButacas();
+		panelSalaCentro.setBorder(ComponentsUtil.getBorder(gestor.getSalaActual().getNombreSala()));
 	}
 	private JTextArea getTxtrLeyendaJubiCumple() {
 		if (txtrLeyendaJubiCumple == null) {
@@ -1762,14 +1768,61 @@ public class VentanaPrincipal extends JFrame {
 					boton.setActionCommand(boton.getText().split(",")[1]+","+boton.getText().split(",")[2]);
 					boton.setText("");
 				}
+				boton.setBorderPainted(false);
+				obtenerEstadoSala(boton);
 				boton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						System.out.println(e.getActionCommand());
+						int tipo = getTipoEntrada();
+						int fila = Integer.parseInt(e.getActionCommand().split(",")[0]);
+						int butaca = Integer.parseInt(e.getActionCommand().split(",")[1]);
+						if(gestor.comprarEntrada(fila, butaca, tipo)){
+							cambiarImagenButaca((JButton)e.getSource(), tipo);
+						}
+						else{
+							gestor.quitarEntrada(fila, butaca);
+							cambiarImagenButaca((JButton)e.getSource(), Entrada.LIBRE);
+						}
 					}
 				});
 			}
+			
 		}
 	}
+	private void obtenerEstadoSala(JButton boton) {
+		int fila = Integer.parseInt(boton.getActionCommand().split(",")[0]);
+		int butaca = Integer.parseInt(boton.getActionCommand().split(",")[1]);
+		boolean result = gestor.getSalaActual().isLibre(fila, butaca);
+		System.out.println(fila+","+butaca+","+result);
+		if(!result){
+			cambiarImagenButaca(boton, Entrada.OCUPADA);
+		}
+		else{
+			cambiarImagenButaca(boton, Entrada.LIBRE);
+		}
+		
+	}
+
+	protected void cambiarImagenButaca(JButton boton, int tipo) {
+		if(tipo == Entrada.LIBRE){
+			ImageUtil.adaptarImagen(boton, "/modulo/img/silla.png");
+		}
+		else if(tipo == Entrada.NORMAL){
+			ImageUtil.adaptarImagen(boton, "/modulo/img/sillaEN.png");
+		}
+		else if(tipo == Entrada.JUBILADO){
+			ImageUtil.adaptarImagen(boton, "/modulo/img/sillaEJ.png");
+		}
+		else if(tipo == Entrada.JUBILADO_Y_PACK_CUMPLE){
+			ImageUtil.adaptarImagen(boton, "/modulo/img/sillaEJC.png");
+		}
+		else if(tipo == Entrada.PACK_CUMPLE){
+			ImageUtil.adaptarImagen(boton, "/modulo/img/sillaEC.png");
+		}
+		else{
+			ImageUtil.adaptarImagen(boton, "/modulo/img/sillaO.png");
+		}
+	}
+
 	private int getTipoEntrada(){
 		if(chckbxCumple.isSelected() && !chckbxJubilado.isSelected()){
 			chckbxCumple.setSelected(false);

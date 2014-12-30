@@ -6,6 +6,7 @@ public class Entrada {
 	public static final int JUBILADO = 2;
 	public static final int PACK_CUMPLE = 3;
 	public static final int JUBILADO_Y_PACK_CUMPLE = 4;
+	public static final int OCUPADA = -1;
 	
 	private String codigo;
 	private String tituloPelicula; 

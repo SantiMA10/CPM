@@ -35,6 +35,10 @@ public class GestorDePedidos {
 		return salaActual;
 	}
 	
+	public Sala getSala(){
+		return peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
+	}
+	
 	public Pelicula cambiarFormato(){
 		if(getPeliculaActual().isIs3D()){
 			return cine.getCartelera().hayEn2D(getPeliculaActual());
@@ -52,7 +56,6 @@ public class GestorDePedidos {
 		Sala sala = peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
 		Entrada entrada = sala.cambiarTipoDeEntrada(fila, butaca, tipo);
 		if(entrada != null){
-			//System.out.println("Entrada comprada :)");
 			pedido.add(entrada);
 			return true;
 		}
