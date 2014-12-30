@@ -665,6 +665,11 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return txtrCarteleraPrecios;
 	}
+	private void volverACartelera(){
+		tablaCartelera.clearSelection();
+		btnCarteleraSiguiente.setEnabled(false);
+		((CardLayout)contentPane.getLayout()).show(contentPane,"cartelera");
+	}
 	private JPanel getPanelPelicula() {
 		if (panelPelicula == null) {
 			panelPelicula = new JPanel();
@@ -920,8 +925,9 @@ public class VentanaPrincipal extends JFrame {
 				prepararModeloListaHoras();
 			}
 		});
+		btnHorarioSiguiente.setEnabled(false);
+
 	}
-	//
 	private void iniciarJCalendar(){
 		String fechaMinima = gestor.getPeliculaActual().getFechas()[0];
 		String fechaMaxima = gestor.getPeliculaActual().getFechas()[gestor.getPeliculaActual().getFechas().length-1];
@@ -1066,7 +1072,7 @@ public class VentanaPrincipal extends JFrame {
 			btnHorarioVolverCartelera.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					lblHorarioImagen.setIcon(null);
-					((CardLayout)contentPane.getLayout()).show(contentPane,"cartelera");
+					volverACartelera();
 				}
 			});
 			btnHorarioVolverCartelera.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
@@ -1248,6 +1254,11 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnSalaVolverCartelera() {
 		if (btnSalaVolverCartelera == null) {
 			btnSalaVolverCartelera = new JButton("Sala Volver Cartelera");
+			btnSalaVolverCartelera.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					volverACartelera();
+				}
+			});
 			btnSalaVolverCartelera.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 		}
 		return btnSalaVolverCartelera;
@@ -1266,7 +1277,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JLabel getLblSalaTitutlo() {
 		if (lblSalaTitulo == null) {
-			lblSalaTitulo = new JLabel("Sala Titutlo");
+			lblSalaTitulo = new JLabel("Sala Titulo");
 			lblSalaTitulo.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_TITTLE_SIZE));
 		}
 		return lblSalaTitulo;
@@ -1281,6 +1292,9 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblLeyendaLibre() {
 		if (lblLeyendaLibre == null) {
 			lblLeyendaLibre = new JLabel("Leyenda Libre");
+			lblLeyendaLibre.setVerticalAlignment(SwingConstants.TOP);
+			lblLeyendaLibre.setVerticalTextPosition(SwingConstants.TOP);
+			lblLeyendaLibre.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
 		return lblLeyendaLibre;
 	}
@@ -1293,6 +1307,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblLeyendaOcupado() {
 		if (lblLeyendaOcupado == null) {
 			lblLeyendaOcupado = new JLabel("Leyenda Ocupado");
+			lblLeyendaOcupado.setVerticalAlignment(SwingConstants.TOP);
+			lblLeyendaOcupado.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
 		return lblLeyendaOcupado;
 	}
@@ -1305,6 +1321,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblLeyendaNormal() {
 		if (lblLeyendaNormal == null) {
 			lblLeyendaNormal = new JLabel("Leyenda Normal");
+			lblLeyendaNormal.setVerticalAlignment(SwingConstants.TOP);
+			lblLeyendaNormal.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
 		return lblLeyendaNormal;
 	}
@@ -1324,6 +1342,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblLeyendaJubilado() {
 		if (lblLeyendaJubilado == null) {
 			lblLeyendaJubilado = new JLabel("Leyenda Jubilado");
+			lblLeyendaJubilado.setVerticalAlignment(SwingConstants.TOP);
+			lblLeyendaJubilado.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
 		return lblLeyendaJubilado;
 	}
@@ -1343,6 +1363,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblLeyendaCumple() {
 		if (lblLeyendaCumple == null) {
 			lblLeyendaCumple = new JLabel("Leyenda Cumple");
+			lblLeyendaCumple.setVerticalAlignment(SwingConstants.TOP);
+			lblLeyendaCumple.setHorizontalAlignment(SwingConstants.TRAILING);
 		}
 		return lblLeyendaCumple;
 	}

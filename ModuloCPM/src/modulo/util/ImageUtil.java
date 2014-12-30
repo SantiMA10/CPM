@@ -27,7 +27,7 @@ public class ImageUtil {
 			try{
 				JLabel label = (JLabel) componente;
 				BufferedImage icono = ImageIO.read(ImageUtil.class.getResource(ruta));
-				label.setIcon(new ImageIcon(Scalr.resize(icono, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, 
+				label.setIcon(new ImageIcon(Scalr.resize(icono, Scalr.Method.SPEED, Scalr.Mode.FIT_TO_HEIGHT, 
 						label.getWidth(),  label.getHeight())));
 			}catch(Exception e){
 				e.printStackTrace();
