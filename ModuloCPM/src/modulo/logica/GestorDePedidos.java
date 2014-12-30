@@ -51,6 +51,16 @@ public class GestorDePedidos {
 	public void setSalaActual(Sala salaActual) {
 		this.salaActual = salaActual;
 	}
+	
+	public int getEntradasPeliculaActual(){
+		int numEntradas = 0;
+		for(int i = 0; i < pedido.size(); i++){
+			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo())){
+				numEntradas++;
+			}
+		}
+		return numEntradas;
+	}
 
 	public boolean comprarEntrada(int fila, int butaca, int tipo){
 		Sala sala = peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
@@ -67,8 +77,11 @@ public class GestorDePedidos {
 			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo()) && pedido.get(i).getFecha().equals(salaActual.getFecha()) &&
 					pedido.get(i).getHora().equals(salaActual.getHora())){
 				Sala sala = peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
+				System.out.println("quitando entrada"+fila+butaca);
+				System.out.println(pedido.get(i));
 				pedido.remove(i);
 				sala.cambiarTipoDeEntrada(fila, butaca, 0);
+				break;
 			}
 		}
 	}
@@ -114,5 +127,42 @@ public class GestorDePedidos {
 
 	public void setSalaActual(String fecha, String hora) {
 		salaActual = peliculaActual.getSala(fecha, hora);
+	}
+
+	public String printPedidoPeliculaActual(ResourceBundle traduccion) {
+		int numNormales = 0, numJubilado = 0, numCumple = 0, numJubiCumple = 0;
+		for(int i = 0; i < pedido.size(); i++){
+			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo())){
+				if(pedido.get(i).getTipo() == Entrada.NORMAL){
+					numNormales++;
+				}
+				else if(pedido.get(i).getTipo() == Entrada.JUBILADO){
+					numJubilado++;
+				}
+				else if(pedido.get(i).getTipo() == Entrada.JUBILADO_Y_PACK_CUMPLE){
+					numCumple++;
+				}
+				else if(pedido.get(i).getTipo() == Entrada.PACK_CUMPLE){
+					numJubiCumple++;
+				}
+			}
+		}
+		String printPedido = "";
+		if(numNormales > 0){
+			printPedido += traduccion.getString("entradaNormal")+": "+numNormales+"\n";
+		}
+		if(numJubilado > 0){
+			printPedido += traduccion.getString("entradaJubilado")+": "+numJubilado+"\n";
+		}
+		if(numCumple > 0){
+			printPedido += traduccion.getString("entradaCumple")+": "+numCumple+"\n";
+		}
+		if(numJubiCumple > 0){
+			printPedido += traduccion.getString("entradaJubiCumple")+": "+numJubiCumple;
+		}
+		if(numNormales == 0 && numJubilado == 0 && numCumple == 0 && numJubiCumple == 0){
+			printPedido = traduccion.getString("pedidoVacio");
+		}
+		return printPedido;
 	}
 }

@@ -38,16 +38,14 @@ public class Sala {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try{
 			BufferedReader fichero = new BufferedReader(new FileReader("data/salas/"+getCodigo()+getFecha().replace("/", "")+getHora().replace(":", "")+".json"));
-			System.out.println("Cargando sala: "+getCodigo()+getFecha()+getHora());
+//			System.out.println("Cargando sala: "+getCodigo()+getFecha()+getHora());
 			java.lang.reflect.Type tipoPeliculas = new TypeToken<int[][]>(){}.getType();
 			sala = gson.fromJson(fichero, tipoPeliculas);
 	    	fichero.close();
-	    	System.out.println("Sala: "+ getTituloPelicula() + " cargada");
+//	    	System.out.println("Sala: "+ getTituloPelicula() + " cargada");
 		}catch(FileNotFoundException fn){
-	    	System.err.println("Sala: "+ getTituloPelicula() + " cargada(Fichero no encontrado)");
 			return false;
 		}catch(Exception e){
-	    	System.err.println("Sala: "+ getTituloPelicula() + " cargada(Otro error)");
 			return false;
 		}
 		return true;
@@ -56,14 +54,12 @@ public class Sala {
 	protected void guardarSala(){
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try{
-			System.out.println("Guardando salas: "+getCodigo()+getFecha()+getHora());
+//			System.out.println("Guardando salas: "+getCodigo()+getFecha()+getHora());
 			BufferedWriter fichero = new BufferedWriter(new FileWriter("data/salas/"+getCodigo()+getFecha().replace("/", "")+getHora().replace(":", "")+".json"));
 			gson.toJson(sala, fichero);
 	    	fichero.close();
-	    	System.out.println("Sala "+getCodigo()+getFecha()+getHora()+" guardada");
+//	    	System.out.println("Sala "+getCodigo()+getFecha()+getHora()+" guardada");
 		}catch(Exception e){
-			e.printStackTrace();
-			System.err.println("Sala "+getCodigo()+getFecha()+getHora()+"no guardada");
 		}
 	}
 	public Entrada cambiarTipoDeEntrada(int fila, int butaca, int tipo){
@@ -123,9 +119,6 @@ public class Sala {
 	}
 
 	public boolean isLibre(int fila, int butaca) {
-		if(fila == 0){
-			return false;
-		}
 		return sala[butaca][fila] == 0;
 	}
 

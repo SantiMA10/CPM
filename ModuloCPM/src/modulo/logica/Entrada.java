@@ -27,6 +27,10 @@ public class Entrada {
 		setTipo(tipo);
 	}
 	
+	public String toString(){
+		return getFila()+","+getButaca()+"";
+	}
+	
 	public String getCodigo() {
 		return codigo;
 	}

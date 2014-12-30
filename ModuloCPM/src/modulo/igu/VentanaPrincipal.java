@@ -915,7 +915,7 @@ public class VentanaPrincipal extends JFrame {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {  
 				calendar.getDayChooser().getDayPanel().getComponentAt(calendar.getDayChooser().getDayPanel().getLocation()).setForeground(DEFAULT_COLOR);
-				String fecha = calendar.getDayChooser().getDay()+"/"+calendar.getMonthChooser().getMonth()+"/"+calendar.getYearChooser().getYear();
+				String fecha = calendar.getDayChooser().getDay()+"/"+(calendar.getMonthChooser().getMonth()+1)+"/"+calendar.getYearChooser().getYear();
 				panelHorarioHoras.setBorder(ComponentsUtil.getBorder(DateUtil.getFechaConFormato(fecha, traduccion.getLocale())));
 				prepararModeloListaHoras();
 			}
@@ -1235,6 +1235,12 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnSalaAtras() {
 		if (btnSalaAtras == null) {
 			btnSalaAtras = new JButton("Sala Atras");
+			btnSalaAtras.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					prepararPanelHorario();
+					((CardLayout)contentPane.getLayout()).show(contentPane,"horario");
+				}
+			});
 			btnSalaAtras.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 		}
 		return btnSalaAtras;
@@ -1305,6 +1311,13 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblLeyendaNormalImagen() {
 		if (lblLeyendaNormalImagen == null) {
 			lblLeyendaNormalImagen = new JLabel("");
+			lblLeyendaNormalImagen.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					chckbxCumple.setSelected(false);
+					chckbxJubilado.setSelected(false);
+				}
+			});
 		}
 		return lblLeyendaNormalImagen;
 	}
@@ -1317,6 +1330,13 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblLeyendaJubiladoImagen() {
 		if (lblLeyendaJubiladoImagen == null) {
 			lblLeyendaJubiladoImagen = new JLabel("");
+			lblLeyendaJubiladoImagen.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					chckbxCumple.setSelected(false);
+					chckbxJubilado.setSelected(true);
+				}
+			});
 		}
 		return lblLeyendaJubiladoImagen;
 	}
@@ -1329,6 +1349,13 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblLeyendaCumpleImagen() {
 		if (lblLeyendaCumpleImagen == null) {
 			lblLeyendaCumpleImagen = new JLabel("");
+			lblLeyendaCumpleImagen.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					chckbxCumple.setSelected(true);
+					chckbxJubilado.setSelected(false);
+				}
+			});
 
 		}
 		return lblLeyendaCumpleImagen;
@@ -1336,6 +1363,13 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblLeyendaJubicumpleImagen() {
 		if (lblLeyendaJubicumpleImagen == null) {
 			lblLeyendaJubicumpleImagen = new JLabel("");
+			lblLeyendaJubicumpleImagen.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					chckbxCumple.setSelected(true);
+					chckbxJubilado.setSelected(true);
+				}
+			});
 
 		}
 		return lblLeyendaJubicumpleImagen;
@@ -1432,6 +1466,8 @@ public class VentanaPrincipal extends JFrame {
 		ImageUtil.adaptarImagen(lblLeyendaJubicumpleImagen, "/modulo/img/sillaEJC.png");
 		colocarButacas();
 		panelSalaCentro.setBorder(ComponentsUtil.getBorder(gestor.getSalaActual().getNombreSala()));
+		txtEntradasTotales.setText(gestor.getEntradasPeliculaActual()+" "+traduccion.getString("entradas"));
+		txtrSalaPedido.setText(gestor.printPedidoPeliculaActual(traduccion));
 	}
 	private JTextArea getTxtrLeyendaJubiCumple() {
 		if (txtrLeyendaJubiCumple == null) {
@@ -1770,20 +1806,24 @@ public class VentanaPrincipal extends JFrame {
 				}
 				boton.setBorderPainted(false);
 				obtenerEstadoSala(boton);
-				boton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						int tipo = getTipoEntrada();
-						int fila = Integer.parseInt(e.getActionCommand().split(",")[0]);
-						int butaca = Integer.parseInt(e.getActionCommand().split(",")[1]);
-						if(gestor.comprarEntrada(fila, butaca, tipo)){
-							cambiarImagenButaca((JButton)e.getSource(), tipo);
+				if(boton.getActionListeners().length == 0){
+					boton.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							int tipo = getTipoEntrada();
+							int fila = Integer.parseInt(e.getActionCommand().split(",")[0]);
+							int butaca = Integer.parseInt(e.getActionCommand().split(",")[1]);
+							if(gestor.comprarEntrada(fila, butaca, tipo)){
+								cambiarImagenButaca((JButton)e.getSource(), tipo);
+							}
+							else{
+								gestor.quitarEntrada(fila, butaca);
+								cambiarImagenButaca((JButton)e.getSource(), Entrada.LIBRE);
+							}
+							txtrSalaPedido.setText(gestor.printPedidoPeliculaActual(traduccion));
+							txtEntradasTotales.setText(gestor.getEntradasPeliculaActual() + " " +traduccion.getString("entradas"));
 						}
-						else{
-							gestor.quitarEntrada(fila, butaca);
-							cambiarImagenButaca((JButton)e.getSource(), Entrada.LIBRE);
-						}
-					}
-				});
+					});
+				}
 			}
 			
 		}
@@ -1791,9 +1831,7 @@ public class VentanaPrincipal extends JFrame {
 	private void obtenerEstadoSala(JButton boton) {
 		int fila = Integer.parseInt(boton.getActionCommand().split(",")[0]);
 		int butaca = Integer.parseInt(boton.getActionCommand().split(",")[1]);
-		boolean result = gestor.getSalaActual().isLibre(fila, butaca);
-		System.out.println(fila+","+butaca+","+result);
-		if(!result){
+		if(!gestor.getSalaActual().isLibre(fila, butaca)){
 			cambiarImagenButaca(boton, Entrada.OCUPADA);
 		}
 		else{
@@ -1840,5 +1878,5 @@ public class VentanaPrincipal extends JFrame {
 		else{
 			return Entrada.NORMAL;
 		}
-		}
+	}
 }
