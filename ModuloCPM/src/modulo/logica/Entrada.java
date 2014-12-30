@@ -10,6 +10,7 @@ public class Entrada {
 	
 	private String codigo;
 	private String tituloPelicula; 
+	private String sala;
 	private String fecha;
 	private String hora;
 	private int fila;
@@ -17,7 +18,7 @@ public class Entrada {
 	private int tipo;
 	private double precio;
 	
-	public Entrada(String codigo, String tituloPelicula, String fecha,
+	public Entrada(String codigo, String tituloPelicula, String sala, String fecha,
 			String hora, int fila, int butaca, int tipo) {
 		setCodigo(codigo);
 		setTituloPelicula(tituloPelicula);
@@ -26,10 +27,22 @@ public class Entrada {
 		setFila(fila);
 		setButaca(butaca);
 		setTipo(tipo);
+		setSala(sala);
 	}
 	
+	private void setSala(String sala) {
+		this.sala = sala;	
+	}
+
+	public void setPrecio(double precio) {
+		this.precio = precio;
+	}
+	private String getSala(){
+		return sala;
+	}
 	public String toString(){
-		return getFila()+","+getButaca()+"";
+		return getTituloPelicula()+"\n"+getSala()+" Sesion: "+getHora()+" Hora: "+getFecha()
+				+"\nFila: "+getFila()+" Butaca: "+getButaca()+"\n";
 	}
 	
 	public String getCodigo() {
@@ -89,6 +102,6 @@ public class Entrada {
 	}
 
 	public double getPrecio() {
-		return precio+1;
+		return precio;
 	}
 }

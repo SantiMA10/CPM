@@ -71,5 +71,21 @@ public class Cine {
 	private void setIncremento3D(double incremento3d) {
 		incremento3D = incremento3d;
 	}
-
+	public double getPrecio(int tipo, boolean is3D){
+		double precio = precioEntrada;
+		if(tipo == Entrada.JUBILADO){
+			precio += getDescuentoJubilado();
+		}
+		else if(tipo == Entrada.JUBILADO_Y_PACK_CUMPLE){
+			precio += getDescuentoJubilado()+getIncrementoCumple();
+		}
+		else if(tipo == Entrada.PACK_CUMPLE){
+			precio += getIncrementoCumple();
+		}
+		if(is3D){
+			precio += getIncremento3D();
+		}
+		return precio;
+		
+	}
 }

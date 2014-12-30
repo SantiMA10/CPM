@@ -1,5 +1,7 @@
 package modulo.logica;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -64,10 +66,11 @@ public class GestorDePedidos {
 
 	public boolean comprarEntrada(int fila, int butaca, int tipo){
 		Sala sala = peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
-		if(sala.isLibre(fila, butaca)){
+		if(sala.isLibre(fila, butaca) || isEnPedido(fila, butaca) == Entrada.OCUPADA){
 			Entrada entrada = sala.cambiarTipoDeEntrada(fila, butaca, tipo);
 			System.out.println(entrada);
 			if(entrada != null){
+				entrada.setPrecio(cine.getPrecio(tipo,getPeliculaActual().isIs3D()));
 				pedido.add(entrada);
 				return true;
 			}
@@ -186,7 +189,7 @@ public class GestorDePedidos {
 		return Entrada.LIBRE;
 	}
 
-	private int isEnPedido(int fila, int butaca) {
+	public int isEnPedido(int fila, int butaca) {
 		for(int i = 0; i < pedido.size(); i++){
 			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo()) && pedido.get(i).getFecha().equals(salaActual.getFecha()) &&
 					pedido.get(i).getHora().equals(salaActual.getHora()) && pedido.get(i).getButaca() == butaca && pedido.get(i).getFila() == fila){
@@ -194,5 +197,22 @@ public class GestorDePedidos {
 			}
 		}
 		return Entrada.OCUPADA;
+	}
+	
+	public void printPedido(String dni){
+	    try {
+	    	BufferedWriter fichero = new BufferedWriter(new FileWriter("entradas/"+dni+".entrada"));
+	    	String entradas = "";
+	    	for(int i = 0; i < pedido.size(); i++){
+	    		entradas += (pedido.get(i).toString());
+	    		if(i < pedido.size()-1){
+	    			entradas += "------------------\n";
+	    		}
+	    	}
+	    	fichero.write(entradas);
+	    	fichero.close();
+	    	}catch (Exception e) {
+	    		e.printStackTrace();
+	    }
 	}
 }

@@ -1869,10 +1869,11 @@ public class VentanaPrincipal extends JFrame {
 							int tipo = getTipoEntrada();
 							int fila = Integer.parseInt(e.getActionCommand().split(",")[0]);
 							int butaca = Integer.parseInt(e.getActionCommand().split(",")[1]);
-							if(gestor.comprarEntrada(fila, butaca, tipo)){
+							if(gestor.getSalaActual().isLibre(fila, butaca)){
+								gestor.comprarEntrada(fila, butaca, tipo);
 								cambiarImagenButaca((JButton)e.getSource(), tipo);
 							}
-							else if(gestor.getSalaActual().isLibre(fila, butaca)){
+							else if(gestor.isEnPedido(fila, butaca) != Entrada.OCUPADA){
 								gestor.quitarEntrada(fila, butaca);
 								cambiarImagenButaca((JButton)e.getSource(), Entrada.LIBRE);
 							}
@@ -2015,13 +2016,25 @@ public class VentanaPrincipal extends JFrame {
 			btnPedidoFinalizar = new JButton("Pedido Finalizar");
 			btnPedidoFinalizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					gestor.guardarSalas();
-					((CardLayout)contentPane.getLayout()).show(contentPane,"inicio");
+					String dni = comprobarDNI();
+					if(dni != null){
+						gestor.guardarSalas();
+						gestor.printPedido(dni);
+						((CardLayout)contentPane.getLayout()).show(contentPane,"inicial");
+					}
 				}
 			});
 		}
 		return btnPedidoFinalizar;
 	}
+	protected String comprobarDNI() {
+		String dni = JOptionPane.showInputDialog("Hola");
+		while(dni == ""){
+			dni = JOptionPane.showInputDialog("Hola");
+		}
+		return dni;
+	}
+
 	private JScrollPane getScrollPanePedidoCentro() {
 		if (scrollPanePedidoCentro == null) {
 			scrollPanePedidoCentro = new JScrollPane();

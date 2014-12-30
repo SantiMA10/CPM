@@ -66,7 +66,7 @@ public class Sala {
 		if(sala[butaca][fila] == 0 && tipo != 0){
 			entradasVendidas++;
 			sala[butaca][fila] = tipo;
-			return new Entrada(getCodigo(), getTituloPelicula(), getFecha(), getHora(), fila, butaca, tipo);
+			return new Entrada(getCodigo(), getTituloPelicula(), getNombreSala(), getFecha(), getHora(), fila, butaca, tipo);
 		}
 		else{
 			sala[butaca][fila] = 0;
