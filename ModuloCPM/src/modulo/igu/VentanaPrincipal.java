@@ -243,6 +243,10 @@ public class VentanaPrincipal extends JFrame {
 	private JScrollPane scrollPanePedidoCentro;
 	private JTable tablaPedido;
 	private MiModeloTabla modeloPedido;
+	private JPanel panelPanelPedidoCentro;
+	private JPanel panelPanelPedidoCentroSur;
+	private JLabel lblPedidoPrecioTotal;
+	private JTextField txtPedidoPrecioTotal;
 
 	/**
 	 * Launch the application.
@@ -337,6 +341,7 @@ public class VentanaPrincipal extends JFrame {
 		btnPedidoFinalizar.setText(traduccion.getString("btnFinalizar"));
 		btnPedidoComprarMas.setText(traduccion.getString("btnComprarMas"));
 		modeloPedido.setColumnIdentifiers(new String[]{traduccion.getString("numEntradas"),traduccion.getString("sesion"),traduccion.getString("pelicula"),traduccion.getString("precio")});
+		lblPedidoPrecioTotal.setText(traduccion.getString("precioTotal"));
 	}
 
 	private JPanel getPanelInicial() {
@@ -1315,8 +1320,10 @@ public class VentanaPrincipal extends JFrame {
 			btnSalaSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					prepararModeloPedido();
-					if(gestor.getEntradasPeliculaActual() > 0 && !modeloListaPedido.contains(gestor.getPeliculaActual()))
+					if(gestor.getEntradasPeliculaActual() > 0 && !modeloListaPedido.contains(gestor.getPeliculaActual())){
 						modeloListaPedido.addElement(gestor.getPeliculaActual());
+						txtPedidoPrecioTotal.setText(String.valueOf(gestor.getPrecioTotal())+"€");
+					}
 					((CardLayout)contentPane.getLayout()).show(contentPane,"pedido");
 				}
 			});
@@ -2001,8 +2008,8 @@ public class VentanaPrincipal extends JFrame {
 			panelPedido.setBackground(DEFAULT_COLOR);
 			panelPedido.setLayout(new BorderLayout(0, 0));
 			panelPedido.add(getLblPedidoTitulo(), BorderLayout.NORTH);
+			panelPedido.add(getPanelPanelPedidoCentro(), BorderLayout.CENTER);
 			panelPedido.add(getPanelPedidoSur(), BorderLayout.SOUTH);
-			panelPedido.add(getScrollPanePedidoCentro(), BorderLayout.CENTER);
 		}
 		return panelPedido;
 	}
@@ -2094,9 +2101,9 @@ public class VentanaPrincipal extends JFrame {
 		return btnPedidoFinalizar;
 	}
 	protected String comprobarDNI() {
-		String dni = 		JOptionPane.showInputDialog(this, traduccion.getString("dni"), traduccion.getString("dni"), JOptionPane.QUESTION_MESSAGE);
+		String dni = JOptionPane.showInputDialog(this, traduccion.getString("dni"), traduccion.getString("dni"), JOptionPane.QUESTION_MESSAGE);
 		while(dni == ""){
-			dni = 		JOptionPane.showInputDialog(this, traduccion.getString("dni"), traduccion.getString("dni"), JOptionPane.QUESTION_MESSAGE);
+			dni = JOptionPane.showInputDialog(this, traduccion.getString("dni"), traduccion.getString("dni"), JOptionPane.QUESTION_MESSAGE);
 		}
 		return dni;
 	}
@@ -2114,6 +2121,7 @@ public class VentanaPrincipal extends JFrame {
 			String[] nombreColumnas = {"N Entradas","Sesion","Pelicula","Precio entradas"};
 			modeloPedido = new MiModeloTabla(nombreColumnas, 0);
 			tablaPedido = new JTable(modeloPedido);
+			tablaPedido.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 			ComponentsUtil.changeJTableHeaderSize(tablaPedido);
 			tablaPedido.getTableHeader().setReorderingAllowed(false);
 			tablaPedido.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -2126,7 +2134,7 @@ public class VentanaPrincipal extends JFrame {
 			nuevaFila[0] = String.valueOf(gestor.getEntradasPeliculaActual());
 			nuevaFila[1] = gestor.getSalaActual().getFecha()+" - "+gestor.getSalaActual().getHora();
 			nuevaFila[2] = gestor.getPeliculaActual().toString();
-			nuevaFila[3] = gestor.getPrecioEntradasPeliculaActual();
+			nuevaFila[3] = gestor.getPrecioEntradasPeliculaActual()+"€";
 			modeloPedido.addRow(nuevaFila);
 		}
 		else{
@@ -2134,7 +2142,7 @@ public class VentanaPrincipal extends JFrame {
 			nuevaFila[0] = String.valueOf(gestor.getEntradasPeliculaActual());
 			nuevaFila[1] = gestor.getSalaActual().getFecha()+" - "+gestor.getSalaActual().getHora();
 			nuevaFila[2] = gestor.getPeliculaActual().toString();
-			nuevaFila[3] = gestor.getPrecioEntradasPeliculaActual();
+			nuevaFila[3] = gestor.getPrecioEntradasPeliculaActual()+"€";
 			modeloPedido.addRow(nuevaFila);
 		}
 	}
@@ -2146,5 +2154,38 @@ public class VentanaPrincipal extends JFrame {
 			}
 		}
 		return -1;
+	}
+	private JPanel getPanelPanelPedidoCentro() {
+		if (panelPanelPedidoCentro == null) {
+			panelPanelPedidoCentro = new JPanel();
+			panelPanelPedidoCentro.setBackground(DEFAULT_COLOR);
+			panelPanelPedidoCentro.setLayout(new BorderLayout(0, 0));
+			panelPanelPedidoCentro.add(getScrollPanePedidoCentro());
+			panelPanelPedidoCentro.add(getPanelPanelPedidoCentroSur(), BorderLayout.SOUTH);
+		}
+		return panelPanelPedidoCentro;
+	}
+	private JPanel getPanelPanelPedidoCentroSur() {
+		if (panelPanelPedidoCentroSur == null) {
+			panelPanelPedidoCentroSur = new JPanel();
+			panelPanelPedidoCentroSur.setBackground(DEFAULT_COLOR);
+			panelPanelPedidoCentroSur.add(getLblPedidoPrecioTotal());
+			panelPanelPedidoCentroSur.add(getTxtPedidoPrecioTotal());
+		}
+		return panelPanelPedidoCentroSur;
+	}
+	private JLabel getLblPedidoPrecioTotal() {
+		if (lblPedidoPrecioTotal == null) {
+			lblPedidoPrecioTotal = new JLabel("Pedido Precio Total");
+		}
+		return lblPedidoPrecioTotal;
+	}
+	private JTextField getTxtPedidoPrecioTotal() {
+		if (txtPedidoPrecioTotal == null) {
+			txtPedidoPrecioTotal = new JTextField();
+			txtPedidoPrecioTotal.setEditable(false);
+			txtPedidoPrecioTotal.setColumns(10);
+		}
+		return txtPedidoPrecioTotal;
 	}
 }

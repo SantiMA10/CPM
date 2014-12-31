@@ -235,4 +235,11 @@ public class GestorDePedidos {
 	    		e.printStackTrace();
 	    }
 	}
+	public double getPrecioTotal(){
+		double precio = 0.0;
+		for(int i = 0; i < pedido.size(); i++){
+			precio += pedido.get(i).getPrecio();
+		}
+		return precio;
+	}
 }
