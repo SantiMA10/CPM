@@ -75,11 +75,9 @@ public class GestorDePedidos {
 	}
 
 	public boolean comprarEntrada(int fila, int butaca, int tipo){
-		System.out.println("Compramos");
 		Sala sala = peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
 		if(sala.isLibre(fila, butaca) || enPedido(fila, butaca) == Entrada.OCUPADA){
 			Entrada entrada = sala.cambiarTipoDeEntrada(fila, butaca, tipo);
-			System.out.println(entrada);
 			if(entrada != null){
 				entrada.setPrecio(cine.getPrecio(tipo,getPeliculaActual().isIs3D()));
 				pedido.add(entrada);
@@ -90,12 +88,10 @@ public class GestorDePedidos {
 	}
 	
 	public void quitarEntrada(int fila, int butaca){
-		System.out.println("Quitamos"+fila+","+butaca);
 		for(int i = 0; i < pedido.size(); i++){
 			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo()) && pedido.get(i).getFecha().equals(salaActual.getFecha()) &&
 					pedido.get(i).getHora().equals(salaActual.getHora()) && pedido.get(i).getButaca() == butaca && pedido.get(i).getFila() == fila){
 				Sala sala = peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
-				System.out.println(pedido.get(i));
 				pedido.remove(pedido.get(i));
 				sala.cambiarTipoDeEntrada(fila, butaca, 0);
 				break;
@@ -213,7 +209,6 @@ public class GestorDePedidos {
 		return Entrada.OCUPADA;
 	}
 	public boolean isEnPedido(int fila, int butaca) {
-		System.out.println(fila+","+butaca);
 		for(int i = 0; i < pedido.size(); i++){
 			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo()) && pedido.get(i).getFecha().equals(salaActual.getFecha()) &&
 					pedido.get(i).getHora().equals(salaActual.getHora()) && pedido.get(i).getButaca() == butaca && pedido.get(i).getFila() == fila){
