@@ -945,7 +945,6 @@ public class VentanaPrincipal extends JFrame {
 	private void prepararPanelHorario(){
 		ImageUtil.adaptarImagen(lblHorarioImagen, gestor.getPeliculaActual().getRutaImagen());
 		iniciarJCalendar();
-		prepararModeloListaHoras();
 		calendar.addPropertyChangeListener("calendar", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {  
@@ -956,7 +955,7 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 		btnHorarioSiguiente.setEnabled(false);
-
+		prepararModeloListaHoras();
 	}
 	private void iniciarJCalendar(){
 		String fechaMinima = gestor.getPeliculaActual().getFechas()[0];
@@ -976,7 +975,12 @@ public class VentanaPrincipal extends JFrame {
 	private void prepararModeloListaHoras(){
 		modeloListaHoras.clear();
 		for(int i = 0; i < gestor.getPeliculaActual().getHoras().length; i++){
-			modeloListaHoras.addElement(gestor.getPeliculaActual().getHoras()[i]);
+			if(!gestor.isSalaLlena(DateUtil.getFechaSinFormato(((TitledBorder)panelHorarioHoras.getBorder()).getTitle(), traduccion.getLocale()), gestor.getPeliculaActual().getHoras()[i])){
+				modeloListaHoras.addElement(gestor.getPeliculaActual().getHoras()[i]);
+			}
+		}
+		if(modeloListaHoras.isEmpty()){
+			modeloListaHoras.addElement("Todas las salas llenas");
 		}
 	}
 	private JPanel getPanelHorarioCentro() {
@@ -1298,6 +1302,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnSalaSiguiente() {
 		if (btnSalaSiguiente == null) {
 			btnSalaSiguiente = new JButton("Sala Siguiente");
+			btnSalaSiguiente.setEnabled(false);
 			btnSalaSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					prepararModeloPedido();
@@ -1869,13 +1874,22 @@ public class VentanaPrincipal extends JFrame {
 							int tipo = getTipoEntrada();
 							int fila = Integer.parseInt(e.getActionCommand().split(",")[0]);
 							int butaca = Integer.parseInt(e.getActionCommand().split(",")[1]);
-							if(gestor.getSalaActual().isLibre(fila, butaca)){
+							boolean result = gestor.getSalaActual().isLibre(fila, butaca);
+							boolean fd = gestor.isEnPedido(fila, butaca);
+							System.out.println(result+","+fd);
+							if(result){
 								gestor.comprarEntrada(fila, butaca, tipo);
 								cambiarImagenButaca((JButton)e.getSource(), tipo);
 							}
-							else if(gestor.isEnPedido(fila, butaca) != Entrada.OCUPADA){
+							else if(fd){
 								gestor.quitarEntrada(fila, butaca);
 								cambiarImagenButaca((JButton)e.getSource(), Entrada.LIBRE);
+							}
+							if(gestor.getEntradasPeliculaActual() == 0){
+								btnSalaSiguiente.setEnabled(false);
+							}
+							else{
+								btnSalaSiguiente.setEnabled(true);
 							}
 							txtrSalaPedido.setText(gestor.printPedidoPeliculaActual(traduccion));
 							txtEntradasTotales.setText(gestor.getEntradasPeliculaActual() + " " +traduccion.getString("entradas"));
@@ -1886,6 +1900,7 @@ public class VentanaPrincipal extends JFrame {
 			
 		}
 	}
+
 	private void obtenerEstadoSala(JButton boton) {
 		int fila = Integer.parseInt(boton.getActionCommand().split(",")[0]);
 		int butaca = Integer.parseInt(boton.getActionCommand().split(",")[1]);
@@ -1992,6 +2007,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnPedidoAtras() {
 		if (btnPedidoAtras == null) {
 			btnPedidoAtras = new JButton("Pedido Atras");
+			btnPedidoAtras.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 			btnPedidoAtras.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					((CardLayout)contentPane.getLayout()).show(contentPane,"sala");
@@ -2003,6 +2019,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnPedidoComprarMas() {
 		if (btnPedidoComprarMas == null) {
 			btnPedidoComprarMas = new JButton("Pedido Comprar Mas");
+			btnPedidoComprarMas.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 			btnPedidoComprarMas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					volverACartelera();
@@ -2014,6 +2031,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnPedidoFinalizar() {
 		if (btnPedidoFinalizar == null) {
 			btnPedidoFinalizar = new JButton("Pedido Finalizar");
+			btnPedidoFinalizar.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
 			btnPedidoFinalizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String dni = comprobarDNI();

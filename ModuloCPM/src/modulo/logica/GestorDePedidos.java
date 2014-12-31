@@ -63,10 +63,21 @@ public class GestorDePedidos {
 		}
 		return numEntradas;
 	}
+	public boolean isSalaLlena(String fecha, String hora){
+		Sala sala = peliculaActual.getSala(fecha, hora);
+		for(int i = 0; i < pedido.size(); i++){
+			if(pedido.get(i).getCodigo().equals(getPeliculaActual().getCodigo()) && pedido.get(i).getFecha().equals(sala.getFecha())
+					&& pedido.get(i).getHora().equals(sala.getHora())){
+				return false;
+			}
+		}
+		return sala.isSalaLlena();
+	}
 
 	public boolean comprarEntrada(int fila, int butaca, int tipo){
+		System.out.println("Compramos");
 		Sala sala = peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
-		if(sala.isLibre(fila, butaca) || isEnPedido(fila, butaca) == Entrada.OCUPADA){
+		if(sala.isLibre(fila, butaca) || enPedido(fila, butaca) == Entrada.OCUPADA){
 			Entrada entrada = sala.cambiarTipoDeEntrada(fila, butaca, tipo);
 			System.out.println(entrada);
 			if(entrada != null){
@@ -79,10 +90,13 @@ public class GestorDePedidos {
 	}
 	
 	public void quitarEntrada(int fila, int butaca){
+		System.out.println("Quitamos"+fila+","+butaca);
 		for(int i = 0; i < pedido.size(); i++){
-			if(isEnPedido(fila, butaca) != Entrada.OCUPADA){
+			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo()) && pedido.get(i).getFecha().equals(salaActual.getFecha()) &&
+					pedido.get(i).getHora().equals(salaActual.getHora()) && pedido.get(i).getButaca() == butaca && pedido.get(i).getFila() == fila){
 				Sala sala = peliculaActual.getSala(salaActual.getFecha(), salaActual.getHora());
-				pedido.remove(i);
+				System.out.println(pedido.get(i));
+				pedido.remove(pedido.get(i));
 				sala.cambiarTipoDeEntrada(fila, butaca, 0);
 				break;
 			}
@@ -181,7 +195,7 @@ public class GestorDePedidos {
 	}
 
 	public int isLibre(int fila, int butaca) {
-		int tipo = isEnPedido(fila, butaca);
+		int tipo = enPedido(fila, butaca);
 		if(!getSalaActual().isLibre(fila, butaca)){
 			return tipo;
 		}
@@ -189,7 +203,7 @@ public class GestorDePedidos {
 		return Entrada.LIBRE;
 	}
 
-	public int isEnPedido(int fila, int butaca) {
+	public int enPedido(int fila, int butaca) {
 		for(int i = 0; i < pedido.size(); i++){
 			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo()) && pedido.get(i).getFecha().equals(salaActual.getFecha()) &&
 					pedido.get(i).getHora().equals(salaActual.getHora()) && pedido.get(i).getButaca() == butaca && pedido.get(i).getFila() == fila){
@@ -197,6 +211,16 @@ public class GestorDePedidos {
 			}
 		}
 		return Entrada.OCUPADA;
+	}
+	public boolean isEnPedido(int fila, int butaca) {
+		System.out.println(fila+","+butaca);
+		for(int i = 0; i < pedido.size(); i++){
+			if(pedido.get(i).getCodigo().equals(peliculaActual.getCodigo()) && pedido.get(i).getFecha().equals(salaActual.getFecha()) &&
+					pedido.get(i).getHora().equals(salaActual.getHora()) && pedido.get(i).getButaca() == butaca && pedido.get(i).getFila() == fila){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void printPedido(String dni){
@@ -209,6 +233,7 @@ public class GestorDePedidos {
 	    			entradas += "------------------\n";
 	    		}
 	    	}
+	    	pedido.clear();
 	    	fichero.write(entradas);
 	    	fichero.close();
 	    	}catch (Exception e) {
