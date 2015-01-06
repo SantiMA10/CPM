@@ -71,7 +71,10 @@ public class GestorDePedidos {
 				return false;
 			}
 		}
-		return sala.isSalaLlena();
+		if(sala != null){
+			return sala.isSalaLlena();
+		}
+		return false;
 	}
 
 	public boolean comprarEntrada(int fila, int butaca, int tipo){
@@ -105,6 +108,7 @@ public class GestorDePedidos {
 					+ formato.format(cine.getPrecioEntrada())+"€\n");
 		sb.append(traduccion.getString("entradaNormal3D") + ": "
 					+ formato.format(cine.getPrecioEntrada()+cine.getIncremento3D())+"€\n");
+		System.out.println(cine.getIncremento3D());
 		sb.append(traduccion.getString("entradaJubilado") + ": "
 					+ formato.format(cine.getPrecioEntrada()+cine.getDescuentoJubilado())+"€\n");
 		sb.append(traduccion.getString("entradaJubilado3D") + ": " 

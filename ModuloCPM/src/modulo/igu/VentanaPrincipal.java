@@ -38,6 +38,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.FlowLayout;
 import java.net.URI;
+import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.awt.event.ActionListener;
@@ -953,10 +954,13 @@ public class VentanaPrincipal extends JFrame {
 		calendar.addPropertyChangeListener("calendar", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {  
-				calendar.getDayChooser().getDayPanel().getComponentAt(calendar.getDayChooser().getDayPanel().getLocation()).setForeground(DEFAULT_COLOR);
 				String fecha = calendar.getDayChooser().getDay()+"/"+(calendar.getMonthChooser().getMonth()+1)+"/"+calendar.getYearChooser().getYear();
-				panelHorarioHoras.setBorder(ComponentsUtil.getBorder(DateUtil.getFechaConFormato(fecha, traduccion.getLocale())));
-				prepararModeloListaHoras();
+				Date date = DateUtil.getFecha(fecha);
+				if((calendar.getMinSelectableDate().before(date) && calendar.getMaxSelectableDate().after(date)) || calendar.getMaxSelectableDate().equals(date)
+						|| calendar.getMinSelectableDate().equals(date)){
+					panelHorarioHoras.setBorder(ComponentsUtil.getBorder(DateUtil.getFechaConFormato(fecha, traduccion.getLocale())));
+					prepararModeloListaHoras();
+				}
 			}
 		});
 		btnHorarioSiguiente.setEnabled(false);
@@ -2093,6 +2097,9 @@ public class VentanaPrincipal extends JFrame {
 					if(dni != null){
 						gestor.guardarSalas();
 						gestor.printPedido(dni);
+						for(int i = 0; i < modeloPedido.getRowCount(); i++){
+							modeloPedido.removeRow(i);
+						}
 						((CardLayout)contentPane.getLayout()).show(contentPane,"inicial");
 					}
 				}
@@ -2177,12 +2184,14 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblPedidoPrecioTotal() {
 		if (lblPedidoPrecioTotal == null) {
 			lblPedidoPrecioTotal = new JLabel("Pedido Precio Total");
+			lblPedidoPrecioTotal.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BORDER_TITTLE_SIZE));
 		}
 		return lblPedidoPrecioTotal;
 	}
 	private JTextField getTxtPedidoPrecioTotal() {
 		if (txtPedidoPrecioTotal == null) {
 			txtPedidoPrecioTotal = new JTextField();
+			txtPedidoPrecioTotal.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BORDER_TITTLE_SIZE));
 			txtPedidoPrecioTotal.setEditable(false);
 			txtPedidoPrecioTotal.setColumns(10);
 		}

@@ -25,9 +25,9 @@ public class Cine {
 		    		String[] datos = linea.split(";");
 		    		setNombre(datos[0]);
 		    		setPrecioEntrada(Double.parseDouble(datos[1]));
-		    		setDescuentoJubilado(Double.parseDouble(datos[2]));
+		    		setIncremento3D(Double.parseDouble(datos[2]));
 		    		setIncrementoCumple(Double.parseDouble(datos[3]));
-		    		setIncremento3D(Double.parseDouble(datos[4]));
+		    		setDescuentoJubilado(Double.parseDouble(datos[4]));
 	    		}
 	    	}
 	    	fichero.close();
