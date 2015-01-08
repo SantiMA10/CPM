@@ -73,7 +73,7 @@ import javax.swing.JTextField;
 public class VentanaPrincipal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	public static Color DEFAULT_COLOR = new Color(32, 178, 170);
-	public static final int DEFAULT_BUTTON_SIZE = 30;// 35
+	public static final int DEFAULT_BUTTON_SIZE = 25;// 35
 	public static final int DEFAULT_TITTLE_SIZE = 60;
 	public static final int DEFAULT_TEXTAREA_SIZE = 25;
 	public static final int DEFAULT_BORDER_TITTLE_SIZE = 30;
@@ -272,6 +272,7 @@ public class VentanaPrincipal extends JFrame {
 	private URL hsURL;
 	private HelpSet hs;
 	private HelpBroker hb;
+	private JButton btnPedidoCancelar;
 
 	/**
 	 * Launch the application.
@@ -344,11 +345,15 @@ public class VentanaPrincipal extends JFrame {
 		lblBienvenida.setText(traduccion.getString("bienvenidos") + " "
 				+ gestor.getNombreCine());
 		btnInicioEspaol.setText(traduccion.getString("btnEs"));
+		btnInicioEspaol.setMnemonic(traduccion.getString("nBtnEs").charAt(0));
 		btnInicioIngls.setText(traduccion.getString("btnEn"));
+		btnInicioIngls.setMnemonic(traduccion.getString("nBtnEn").charAt(0));
 		// Cartelera
 		lblCarteleraTitulo.setText(traduccion.getString("cartelera"));
 		btnCarteleraAtras.setText(traduccion.getString("btnAtras"));
+		btnCarteleraAtras.setMnemonic(traduccion.getString("nBtnAtras").charAt(0));
 		btnCarteleraSiguiente.setText(traduccion.getString("btnSiguiente"));
+		btnCarteleraSiguiente.setMnemonic(traduccion.getString("nBtnSiguiente").charAt(0));
 		panelCarteleraRecomendadas.setBorder(ComponentsUtil
 				.getBorder(traduccion.getString("recomendadas")));
 		panelCarteleraPrecios.setBorder(ComponentsUtil.getBorder(traduccion
@@ -363,17 +368,23 @@ public class VentanaPrincipal extends JFrame {
 		txtrCarteleraPrecios.setText(gestor.getListaPrecios(traduccion));
 		// Pelicula
 		btnPeliculaAtras.setText(traduccion.getString("btnAtras"));
+		btnPeliculaAtras.setMnemonic(traduccion.getString("nBtnAtras").charAt(0));
 		btnPeliculaSiguiente.setText(traduccion.getString("btnSiguiente"));
+		btnPeliculaSiguiente.setMnemonic(traduccion.getString("nBtnSiguiente").charAt(0));
 		btnPeliculaVerTrailer.setText(traduccion.getString("btnVerTrailer"));
+		btnPeliculaVerTrailer.setMnemonic(traduccion.getString("nBtnVerTrailer").charAt(0));
 		panelPeliculaSinopsis.setBorder(ComponentsUtil.getBorder(traduccion
 				.getString("sinopsis")));
 		panelPeliculaInformacion.setBorder(ComponentsUtil.getBorder(traduccion
 				.getString("informacion")));
 		// Horario
 		btnHorarioAtras.setText(traduccion.getString("btnAtras"));
+		btnHorarioAtras.setMnemonic(traduccion.getString("nBtnAtras").charAt(0));
 		btnHorarioVolverCartelera.setText(traduccion
 				.getString("btnVolverACartelera"));
+		btnHorarioVolverCartelera.setMnemonic(traduccion.getString("nBtnVolverACartelera").charAt(0));
 		btnHorarioSiguiente.setText(traduccion.getString("btnSiguiente"));
+		btnHorarioSiguiente.setMnemonic(traduccion.getString("nBtnSiguiente").charAt(0));
 		lblHorarioTitulo.setText(traduccion.getString("horario"));
 		panelHorarioJCalendar.setBorder(ComponentsUtil.getBorder(traduccion
 				.getString("calendario")));
@@ -393,17 +404,26 @@ public class VentanaPrincipal extends JFrame {
 		chckbxCumple.setText(traduccion.getString("cumple"));
 		chckbxJubilado.setText(traduccion.getString("jubilado"));
 		btnSalaAtras.setText(traduccion.getString("btnAtras"));
+		btnSalaAtras.setMnemonic(traduccion.getString("nBtnAtras").charAt(0));
 		btnSalaSiguiente.setText(traduccion.getString("btnSiguiente"));
+		btnSalaSiguiente.setMnemonic(traduccion.getString("nBtnSiguiente").charAt(0));
 		btnSalaVolverCartelera.setText(traduccion
 				.getString("btnVolverACartelera"));
+		btnSalaVolverCartelera.setMnemonic(traduccion
+				.getString("nBtnVolverACartelera").charAt(0));
 		txtrTipoEntrada.setText(traduccion.getString("notaTipoEntrada"));
 		txtrSalaPedido.setText(traduccion.getString("pedidoVacio"));
 		lblEntradasTotales.setText(traduccion.getString("entradasTotales"));
 		// Pedido
 		lblPedidoTitulo.setText(traduccion.getString("pedido"));
 		btnPedidoAtras.setText(traduccion.getString("btnAtras"));
+		btnPedidoAtras.setMnemonic(traduccion.getString("nBtnAtras").charAt(0));
 		btnPedidoFinalizar.setText(traduccion.getString("btnFinalizar"));
+		btnPedidoFinalizar.setMnemonic(traduccion.getString("nBtnFinalizar").charAt(0));
 		btnPedidoComprarMas.setText(traduccion.getString("btnComprarMas"));
+		btnPedidoComprarMas.setMnemonic(traduccion.getString("nBtnComprarMas").charAt(0));
+		btnPedidoCancelar.setText(traduccion.getString("btnCancelar"));
+		btnPedidoCancelar.setMnemonic(traduccion.getString("nBtnCancelar").charAt(0));
 		modeloPedido.setColumnIdentifiers(new String[] {
 				traduccion.getString("numEntradas"),
 				traduccion.getString("sesion"),
@@ -578,8 +598,8 @@ public class VentanaPrincipal extends JFrame {
 		ComponentsUtil.changeJTableHeaderSize(tablaCartelera);
 		tablaCartelera.getColumnModel().getColumn(0).setMaxWidth(208);
 		tablaCartelera.getColumnModel().getColumn(0).setMinWidth(208);
-		tablaCartelera.getColumnModel().removeColumn(
-				tablaCartelera.getColumnModel().getColumn(2));
+		if(tablaCartelera.getColumnCount() == 3)
+			tablaCartelera.getColumnModel().removeColumn(tablaCartelera.getColumnModel().getColumn(2));
 	}
 
 	private JPanel getPanelCarteleraSur() {
@@ -826,14 +846,9 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	private void volverACartelera() {
-		int fila = tablaCartelera.getSelectedRow();
-		tablaCartelera.clearSelection();
-		if(fila > -1){
-			JTextPane objecto = ((JTextPane) tablaCartelera.getValueAt(fila, 1));
-			objecto.setForeground(Color.BLACK);
-			tablaCartelera.setValueAt(objecto, fila, 1);
-			((JTextPane) tablaCartelera.getValueAt(fila, 1)).getForeground();
-		}
+		modeloCartelera.setRowCount(0);
+		prepararModeloCartelera();
+		ajustarTablaCartelera();
 		btnCarteleraSiguiente.setEnabled(false);
 		((CardLayout) contentPane.getLayout()).show(contentPane, "cartelera");
 		if (gestor.isPedidoVacio()) {
@@ -869,8 +884,8 @@ public class VentanaPrincipal extends JFrame {
 		if (panelPeliculaSur == null) {
 			panelPeliculaSur = new JPanel();
 			panelPeliculaSur.setBackground(DEFAULT_COLOR);
-			panelPeliculaSur.setLayout(new GridLayout(0, 2, 0, 0));
-			panelPeliculaSur.add(getPanelPeliculaSurIzquierda());
+			panelPeliculaSur.setLayout(new BorderLayout(0, 0));
+			panelPeliculaSur.add(getPanelPeliculaSurIzquierda(), BorderLayout.WEST);
 			panelPeliculaSur.add(getPanelPeliculaSurDerecha());
 		}
 		return panelPeliculaSur;
@@ -1254,10 +1269,10 @@ public class VentanaPrincipal extends JFrame {
 		if (panelHorarioSur == null) {
 			panelHorarioSur = new JPanel();
 			panelHorarioSur.setBackground(DEFAULT_COLOR);
-			panelHorarioSur.setLayout(new GridLayout(0, 3, 0, 0));
-			panelHorarioSur.add(getPanelHorarioSurIzquierda());
+			panelHorarioSur.setLayout(new BorderLayout(0, 0));
+			panelHorarioSur.add(getPanelHorarioSurIzquierda(), BorderLayout.WEST);
 			panelHorarioSur.add(getPanelHorarioSurCentro());
-			panelHorarioSur.add(getPanelHorarioSurDerecha());
+			panelHorarioSur.add(getPanelHorarioSurDerecha(), BorderLayout.EAST);
 		}
 		return panelHorarioSur;
 	}
@@ -1289,6 +1304,7 @@ public class VentanaPrincipal extends JFrame {
 		if (panelHorarioSurCentro == null) {
 			panelHorarioSurCentro = new JPanel();
 			panelHorarioSurCentro.setBackground(DEFAULT_COLOR);
+			panelHorarioSurCentro.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			panelHorarioSurCentro.add(getBtnHorarioVolverCartelera());
 		}
 		return panelHorarioSurCentro;
@@ -1422,10 +1438,10 @@ public class VentanaPrincipal extends JFrame {
 		if (panelSalaSur == null) {
 			panelSalaSur = new JPanel();
 			panelSalaSur.setBackground(DEFAULT_COLOR);
-			panelSalaSur.setLayout(new GridLayout(0, 3, 0, 0));
-			panelSalaSur.add(getPanelSalaSurIzquierda());
+			panelSalaSur.setLayout(new BorderLayout(0, 0));
+			panelSalaSur.add(getPanelSalaSurIzquierda(), BorderLayout.WEST);
 			panelSalaSur.add(getPanelSalaSurCentro());
-			panelSalaSur.add(getPanelSalaSurDerecha());
+			panelSalaSur.add(getPanelSalaSurDerecha(), BorderLayout.EAST);
 		}
 		return panelSalaSur;
 	}
@@ -1446,6 +1462,7 @@ public class VentanaPrincipal extends JFrame {
 		if (panelSalaSurCentro == null) {
 			panelSalaSurCentro = new JPanel();
 			panelSalaSurCentro.setBackground(DEFAULT_COLOR);
+			panelSalaSurCentro.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			panelSalaSurCentro.add(getBtnSalaVolverCartelera());
 		}
 		return panelSalaSurCentro;
@@ -2375,10 +2392,10 @@ public class VentanaPrincipal extends JFrame {
 		if (panelPedidoSur == null) {
 			panelPedidoSur = new JPanel();
 			panelPedidoSur.setBackground(DEFAULT_COLOR);
-			panelPedidoSur.setLayout(new GridLayout(0, 3, 0, 0));
-			panelPedidoSur.add(getPanelPedidoSurIzquierda());
+			panelPedidoSur.setLayout(new BorderLayout(0, 0));
+			panelPedidoSur.add(getPanelPedidoSurIzquierda(), BorderLayout.WEST);
 			panelPedidoSur.add(getPanelPedidoSurCentro());
-			panelPedidoSur.add(getPanelPedidoSurDerecha());
+			panelPedidoSur.add(getPanelPedidoSurDerecha(), BorderLayout.EAST);
 		}
 		return panelPedidoSur;
 	}
@@ -2399,6 +2416,7 @@ public class VentanaPrincipal extends JFrame {
 		if (panelPedidoSurCentro == null) {
 			panelPedidoSurCentro = new JPanel();
 			panelPedidoSurCentro.setBackground(DEFAULT_COLOR);
+			panelPedidoSurCentro.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			panelPedidoSurCentro.add(getBtnPedidoComprarMas());
 		}
 		return panelPedidoSurCentro;
@@ -2411,6 +2429,7 @@ public class VentanaPrincipal extends JFrame {
 					.getLayout();
 			flowLayout.setAlignment(FlowLayout.RIGHT);
 			panelPedidoSurDerecha.setBackground(DEFAULT_COLOR);
+			panelPedidoSurDerecha.add(getBtnPedidoCancelar());
 			panelPedidoSurDerecha.add(getBtnPedidoFinalizar());
 		}
 		return panelPedidoSurDerecha;
@@ -2459,6 +2478,9 @@ public class VentanaPrincipal extends JFrame {
 						for (int i = 0; i < modeloPedido.getRowCount(); i++) {
 							modeloPedido.removeRow(i);
 						}
+						modeloCartelera.setRowCount(0);
+						prepararModeloCartelera();
+						ajustarTablaCartelera();
 						((CardLayout) contentPane.getLayout()).show(
 								contentPane, "inicial");
 					}
@@ -2768,5 +2790,22 @@ public class VentanaPrincipal extends JFrame {
 			panelPedidoNorteDerecha.add(getBtnPedidoAyuda());
 		}
 		return panelPedidoNorteDerecha;
+	}
+	private JButton getBtnPedidoCancelar() {
+		if (btnPedidoCancelar == null) {
+			btnPedidoCancelar = new JButton("");
+			btnPedidoCancelar.setFont(new Font("Lucida Grande", Font.PLAIN, DEFAULT_BUTTON_SIZE));
+			btnPedidoCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					gestor.borrarPedido();
+					modeloCartelera.setRowCount(0);
+					prepararModeloCartelera();
+					ajustarTablaCartelera();
+					((CardLayout) contentPane.getLayout()).show(
+							contentPane, "inicial");
+				}
+			});
+		}
+		return btnPedidoCancelar;
 	}
 }

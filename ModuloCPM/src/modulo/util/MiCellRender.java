@@ -11,14 +11,14 @@ public class MiCellRender extends DefaultTableCellRenderer{
  
 	private static final long serialVersionUID = 1L;
 	
-	public void fillColor(JTable tabla, JTextPane textPane,boolean isSelected ){
+	public void fillColor(JTable tabla, JTextPane textPane, boolean isSelected ){
         if(isSelected){
             textPane.setBackground(tabla.getSelectionBackground());
             textPane.setForeground(Color.WHITE);
         }
         else{
             textPane.setBackground(tabla.getBackground());
-            textPane.setForeground(Color.black);
+            textPane.setForeground(Color.BLACK);
         }
     }
 

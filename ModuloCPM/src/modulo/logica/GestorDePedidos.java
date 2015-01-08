@@ -239,6 +239,11 @@ public class GestorDePedidos {
 	    		e.printStackTrace();
 	    }
 	}
+	public void borrarPedido(){
+		pedido = new ArrayList<Entrada>();
+		peliculaActual = null;
+		salaActual = null;
+	}
 	public double getPrecioTotal(){
 		double precio = 0.0;
 		for(int i = 0; i < pedido.size(); i++){
