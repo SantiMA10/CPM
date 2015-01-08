@@ -1,5 +1,6 @@
 package modulo.util;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
@@ -13,11 +14,11 @@ public class MiCellRender extends DefaultTableCellRenderer{
 	public void fillColor(JTable tabla, JTextPane textPane,boolean isSelected ){
         if(isSelected){
             textPane.setBackground(tabla.getSelectionBackground());
-            textPane.setForeground(tabla.getSelectionForeground());
+            textPane.setForeground(Color.WHITE);
         }
         else{
             textPane.setBackground(tabla.getBackground());
-            textPane.setForeground(tabla.getForeground());
+            textPane.setForeground(Color.black);
         }
     }
 

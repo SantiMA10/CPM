@@ -119,7 +119,7 @@ public class GestorDePedidos {
 				+ formato.format(cine.getPrecioEntrada()+cine.getIncrementoCumple()+cine.getIncremento3D())+"€\n");
 		sb.append(traduccion.getString("entradaJubiCumple") + ": "
 				+ formato.format(cine.getPrecioEntrada()+cine.getIncrementoCumple()+cine.getDescuentoJubilado())+"€\n");
-	sb.append(traduccion.getString("entradaJubiCumple3D") + ": "
+		sb.append(traduccion.getString("entradaJubiCumple3D") + ": "
 			+ formato.format(cine.getPrecioEntrada()+cine.getIncrementoCumple()+cine.getIncremento3D()+cine.getDescuentoJubilado())+"€");
 		return sb.toString();
 	}
