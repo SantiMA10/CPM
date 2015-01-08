@@ -2614,9 +2614,13 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblLogoCine() {
 		if (lblLogoCine == null) {
 			lblLogoCine = new JLabel("");
+			lblLogoCine.addComponentListener(new ComponentAdapter() {
+				@Override
+				public void componentResized(ComponentEvent e) {
+					ImageUtil.adaptarImagen(lblLogoCine, "/modulo/img/cine.png");
+				}
+			});
 			lblLogoCine.setHorizontalAlignment(SwingConstants.CENTER);
-			lblLogoCine.setIcon(new ImageIcon(VentanaPrincipal.class
-					.getResource("/modulo/img/cine.png")));
 		}
 		return lblLogoCine;
 	}
